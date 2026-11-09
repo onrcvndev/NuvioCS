@@ -1,6 +1,6 @@
-"""Builds the Nuvio CS TV icons (launcher, TV banner, splash mark) from nuvio-rs-logo.png.
+"""Builds the Nuvio CS TV icons (launcher, TV banner, splash mark) from nuvio-cs-logo.png.
 
-Usage: python3 branding/generate_tv_icons.py branding/nuvio-rs-logo.png app/src/main/res preview.png
+Usage: python3 branding/generate_tv_icons.py branding/nuvio-cs-logo.png app/src/main/res preview.png
 """
 import os, sys
 import numpy as np

@@ -1,23 +1,18 @@
 # Nuvio CS privacy policy
 
-Nuvio CS is a personal, unofficial fork of the Nuvio apps for Android phones and Android TV. This policy covers its optional "Sync with Google" feature.
+Nuvio CS is a personal, unofficial fork of [NuvioTV](https://github.com/NuvioMedia/NuvioTV) for
+Android TV. There is no Nuvio CS server: the developer never receives, stores or sees your data.
 
-## What Sync with Google does
-When you sign in with Google under Settings > Nuvio CS > Sync, the app keeps one file, "Nuvio CS sync.json", in your own Google Drive. The file holds only the things you choose to sync:
-- Nuvio CS settings.
-- Live TV sources and their logins, favourites, categories and the last channel you watched.
+## What leaves your device
 
-## Google data the app uses
-- **Your email address** (`email` and `openid` scopes). The app uses it only to show which account is signed in.
-- **Google Drive, files this app created** (`drive.file` scope). The app reads and writes only the sync file it made. It cannot see any of your other Drive files.
-
-## Where your data goes
-Your data goes only between your devices and your own Google account. There is no Nuvio CS server. The developer never receives, stores or sees your data, and nothing is sold or shared with anyone.
-
-## Removing your data
-- Sign out under Settings > Nuvio CS > Sync. This also withdraws the app's access to your Google account.
-- To remove the synced data, delete "Nuvio CS sync.json" from your Google Drive.
-- You can also remove the app's access at https://myaccount.google.com/permissions.
+- **Nuvio account.** If you sign in, your library, progress and settings sync through Nuvio's own
+  services, as in NuvioTV. See the [Nuvio privacy policy](https://nuvio.tv/privacy-policy).
+- **Add-ons, plugins and CloudStream extensions.** These contact the sites and services they are
+  made for when you browse or play something. Each one follows its own provider's terms.
+- **Metadata.** Title details and artwork come from services such as TMDB.
+- **Updates.** The app checks this repository's GitHub releases for new versions, and downloads the
+  audio sync speech model from them when you use that feature.
 
 ## Contact
-Open an issue at https://github.com/DavidVamaiotu/NuvioTV-Nuvio CS/issues.
+
+Open an issue at https://github.com/onrcvndev/NuvioCS/issues.

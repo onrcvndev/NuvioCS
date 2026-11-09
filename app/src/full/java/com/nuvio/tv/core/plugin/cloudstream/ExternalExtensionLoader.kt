@@ -727,7 +727,7 @@ class ExternalExtensionLoader @Inject constructor(
      * Runs plugin.load() and returns every MainAPI it registered: the plugin's own list
      * plus providers that appeared in APIHolder.allProviders during load. The second
      * source catches hub plugins whose entry class delegates registration to an inner
-     * Plugin instance (e.g. WioSinema's DiziPalHubEntry -> DiziPalPlugin).
+     * Plugin instance.
      */
     private fun loadPluginCollectingApis(scraperId: String, plugin: Plugin, dexFile: File): PluginLoadResult =
         synchronized(pluginLoadLock) {

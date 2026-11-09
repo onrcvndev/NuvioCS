@@ -55,8 +55,8 @@ open class Plugin {
         _registeredMainAPIs.add(element)
         element.sourcePlugin = this.filename
         // Upstream BasePlugin her kaydı global listeye de ekler. Hub tarzı eklentiler
-        // (ör. WioSinema) kaydı iç delege Plugin örneği üzerinden yapar ve
-        // loader bu sağlayıcıları ancak allProviders farkından görebilir.
+        // kaydı iç delege Plugin örneği üzerinden yapar ve loader bu sağlayıcıları
+        // ancak allProviders farkından görebilir.
         try {
             synchronized(APIHolder.allProviders) {
                 APIHolder.allProviders.add(element)
