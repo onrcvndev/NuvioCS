@@ -143,6 +143,20 @@
 -keep class com.fasterxml.jackson.** { *; }
 -keepclassmembers class com.fasterxml.jackson.** { *; }
 
+# Rhino: extensions evaluate site scripts with it (e.g. to decrypt stream links);
+# the app never calls it, so without this R8 would strip it.
+-keep class org.mozilla.javascript.** { *; }
+-keepclassmembers class org.mozilla.javascript.** { *; }
+# Material Components: extensions build their settings dialogs from these widgets.
+-keep class com.google.android.material.** { *; }
+# JSON parsing and fuzzy title matching that extensions call; the app itself uses only parts of
+# them, so R8 would strip what extensions need.
+-keep class kotlinx.serialization.** { *; }
+-keepclassmembers class kotlinx.serialization.** { *; }
+-keep class me.xdrop.fuzzywuzzy.** { *; }
+# The CloudStream library's YouTube extractor references NewPipe, which is left out of the build.
+-dontwarn org.schabi.newpipe.**
+
 # AndroidX components referenced by extensions
 -keep class androidx.fragment.app.** { *; }
 -keep interface androidx.fragment.app.** { *; }
