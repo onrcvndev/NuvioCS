@@ -50,7 +50,9 @@ The app is fully translated into Turkish.
 
 ## Installation
 
-Download the APK for your device from [Releases](https://github.com/onrcvndev/NuvioCS/releases)
+On the TV, install the **Downloader** app, open it and enter the code **2258081**.
+
+Or download the APK for your device from [Releases](https://github.com/onrcvndev/NuvioCS/releases)
 and sideload it onto your Android TV. Most TVs and streaming boxes need the `arm64-v8a` APK; the
 `universal` APK runs everywhere but is larger. Once installed, the app offers new releases itself.
 
