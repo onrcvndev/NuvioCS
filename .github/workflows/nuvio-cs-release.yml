@@ -1,0 +1,217 @@
+# Builds the full flavor as Nuvio CS and publishes a GitHub release that the in-app updater reads.
+#
+# Version, application id and update repository come from fork.properties: bump versionName and
+# versionCode there, push, then run this workflow from the branch. Upstream's own workflows were
+# removed from this fork; if an upstream sync brings one back (or changes a removed one), drop it
+# again with `git rm` while resolving the merge.
+#
+# Required secrets:
+#   NUVIO_CS_LOCAL_PROPERTIES_BASE64  base64 of a local.properties with TMDB_API_KEY and any other
+#                                     service keys (Trakt, Supabase, ...); signing lines are ignored
+#   NUVIO_CS_KEYSTORE_BASE64          base64 of the release keystore (.jks). Keep it forever:
+#                                     updates only install over APKs signed with the same key
+#   NUVIO_CS_STORE_PASSWORD, NUVIO_CS_KEY_ALIAS, NUVIO_CS_KEY_PASSWORD
+name: Nuvio CS Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Create a draft to review, or publish right away
+        required: true
+        type: choice
+        options:
+          - draft
+          - publish
+        default: draft
+      notes:
+        description: Release notes (Markdown). Empty uses the commit list since the previous release
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nuvio-cs-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: ${{ inputs.mode }} Nuvio CS release
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      LOCAL_PROPERTIES_BASE64: ${{ secrets.NUVIO_CS_LOCAL_PROPERTIES_BASE64 }}
+      KEYSTORE_BASE64: ${{ secrets.NUVIO_CS_KEYSTORE_BASE64 }}
+      STORE_PASSWORD: ${{ secrets.NUVIO_CS_STORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.NUVIO_CS_KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.NUVIO_CS_KEY_PASSWORD }}
+
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Read version from fork.properties
+        id: version
+        run: |
+          prop() { sed -n -E "s/^[[:space:]]*$1[[:space:]]*=[[:space:]]*(.*[^[:space:]])[[:space:]]*$/\1/p" fork.properties | tail -n 1; }
+          version="$(prop versionName)"
+          version_code="$(prop versionCode)"
+          application_id="$(prop applicationId)"
+          app_name="$(prop appName)"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]] || { echo "versionName '$version' is not semver" >&2; exit 1; }
+          [[ "$version_code" =~ ^[0-9]+$ ]] || { echo "versionCode '$version_code' is not a number" >&2; exit 1; }
+          prerelease=false
+          [[ "$version" == *-* ]] && prerelease=true
+          previous_tag="$(git tag --list 'v[0-9]*' --sort=-v:refname | head -n 1)"
+          {
+            echo "version=$version"
+            echo "tag=v$version"
+            echo "version_code=$version_code"
+            echo "application_id=$application_id"
+            echo "app_name=$app_name"
+            echo "prerelease=$prerelease"
+            echo "previous_tag=$previous_tag"
+          } >> "$GITHUB_OUTPUT"
+          echo "Releasing $app_name v$version ($version_code), previous tag: ${previous_tag:-none}"
+
+      - name: Validate release state
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" != "branch" ]]; then
+            echo "Run this workflow from a branch, not a ${GITHUB_REF_TYPE}." >&2
+            exit 1
+          fi
+          if git rev-parse --verify --quiet "refs/tags/$TAG" >/dev/null; then
+            echo "Tag $TAG already exists. Bump versionName in fork.properties." >&2
+            exit 1
+          fi
+          missing=()
+          for name in LOCAL_PROPERTIES_BASE64 KEYSTORE_BASE64 STORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            [[ -n "${!name}" ]] || missing+=("NUVIO_CS_${name}")
+          done
+          if (( ${#missing[@]} > 0 )); then
+            echo "Missing secrets: ${missing[*]}" >&2
+            exit 1
+          fi
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Configure properties and signing
+        run: |
+          printf '%s' "$LOCAL_PROPERTIES_BASE64" | base64 --decode > local.properties
+          # The runner's SDK and the signing secrets below win over anything in the secret file.
+          sed -i -E '/^[[:space:]]*(sdk\.dir|NUVIO_RELEASE_[A-Z_]+)[[:space:]]*=/d' local.properties
+          grep -Eq '^[[:space:]]*TMDB_API_KEY[[:space:]]*=[[:space:]]*.+$' local.properties || {
+            echo "local.properties secret has no TMDB_API_KEY; plugins cannot look up titles without it" >&2
+            exit 1
+          }
+          keystore="$RUNNER_TEMP/nuvio-cs-release.jks"
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$keystore"
+          {
+            echo "NUVIO_RELEASE_STORE_FILE=$keystore"
+            echo "NUVIO_RELEASE_STORE_PASSWORD=$STORE_PASSWORD"
+            echo "NUVIO_RELEASE_KEY_ALIAS=$KEY_ALIAS"
+            echo "NUVIO_RELEASE_KEY_PASSWORD=$KEY_PASSWORD"
+          } >> "$GITHUB_ENV"
+
+      - name: Build full release APKs
+        run: ./gradlew :app:assembleFullRelease --stacktrace
+
+      - name: Name and verify APKs
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION_CODE: ${{ steps.version.outputs.version_code }}
+          APPLICATION_ID: ${{ steps.version.outputs.application_id }}
+          PREVIOUS_TAG: ${{ steps.version.outputs.previous_tag }}
+        run: |
+          set -euo pipefail
+          src=app/build/outputs/apk/full/release
+          mkdir -p release-apks
+          # Asset names keep the plain ABI names: the updater's AbiSelector matches them directly.
+          for abi in arm64-v8a armeabi-v7a x86_64 x86 universal; do
+            test -f "$src/app-full-$abi-release.apk"
+            mv "$src/app-full-$abi-release.apk" "release-apks/NuvioCS-$TAG-$abi.apk"
+          done
+
+          aapt="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          apksigner="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          badging() { "$aapt" dump badging "$1" | head -n 1; }
+          cert() { "$apksigner" verify --print-certs "$1" | sed -n -E 's/.*certificate SHA-256 digest:[[:space:]]*([^[:space:]]+).*/\1/p' | head -n 1; }
+
+          apk="release-apks/NuvioCS-$TAG-arm64-v8a.apk"
+          line="$(badging "$apk")"
+          package="$(sed -n "s/^package: name='\([^']*\)'.*/\1/p" <<< "$line")"
+          code="$(sed -n "s/.*versionCode='\([^']*\)'.*/\1/p" <<< "$line")"
+          [[ "$package" == "$APPLICATION_ID" ]] || { echo "APK package is $package, expected $APPLICATION_ID" >&2; exit 1; }
+          [[ "$code" == "$VERSION_CODE" ]] || { echo "APK versionCode is $code, expected $VERSION_CODE" >&2; exit 1; }
+          current_cert="$(cert "$apk")"
+          echo "Package $package, versionCode $code, certificate $current_cert"
+
+          # An update installs only with the same signing key and a higher versionCode.
+          if [[ -n "$PREVIOUS_TAG" ]]; then
+            mkdir -p previous
+            if gh release download "$PREVIOUS_TAG" --repo "$GITHUB_REPOSITORY" --pattern '*-arm64-v8a.apk' --dir previous; then
+              previous_apk="$(find previous -name '*.apk' | head -n 1)"
+              previous_code="$(sed -n "s/.*versionCode='\([^']*\)'.*/\1/p" <<< "$(badging "$previous_apk")")"
+              previous_cert="$(cert "$previous_apk")"
+              (( code > previous_code )) || { echo "versionCode $code must be greater than $PREVIOUS_TAG's $previous_code" >&2; exit 1; }
+              [[ "$current_cert" == "$previous_cert" ]] || { echo "Signing key differs from $PREVIOUS_TAG; users could not update" >&2; exit 1; }
+            else
+              echo "::warning::Could not download $PREVIOUS_TAG's APK; skipped the update compatibility check"
+            fi
+          fi
+          ls -l release-apks
+
+      - name: Write release notes
+        env:
+          NOTES: ${{ inputs.notes }}
+          PREVIOUS_TAG: ${{ steps.version.outputs.previous_tag }}
+          APP_NAME: ${{ steps.version.outputs.app_name }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if [[ -n "$NOTES" ]]; then
+            printf '%s\n' "$NOTES" > release-notes.md
+          elif [[ -n "$PREVIOUS_TAG" ]]; then
+            # First-parent keeps an upstream sync as one merge line instead of every upstream commit.
+            git log --first-parent --no-decorate --pretty='- %s' "$PREVIOUS_TAG..HEAD" > release-notes.md
+          else
+            echo "First $APP_NAME release." > release-notes.md
+          fi
+          [[ -s release-notes.md ]] || echo "$APP_NAME $VERSION" > release-notes.md
+          cat release-notes.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload APKs as workflow artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: nuvio-cs-${{ steps.version.outputs.tag }}
+          path: release-apks/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Create GitHub release
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          TITLE: ${{ steps.version.outputs.app_name }} ${{ steps.version.outputs.version }}
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          args=("$TAG" --target "$GITHUB_SHA" --title "$TITLE" --notes-file release-notes.md)
+          if [[ "$PRERELEASE" == "true" ]]; then
+            args+=(--prerelease)
+          elif [[ "$MODE" == "publish" ]]; then
+            args+=(--latest)
+          fi
+          [[ "$MODE" == "draft" ]] && args+=(--draft)
+          gh release create "${args[@]}" release-apks/*.apk
