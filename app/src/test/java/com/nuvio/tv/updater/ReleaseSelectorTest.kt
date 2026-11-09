@@ -5,22 +5,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ReleaseSelectorTest {
-    @Test
-    fun `stable channel excludes GitHub and tag prereleases`() {
-        val releases = listOf(
-            release("1.1.0-beta.2", prerelease = true),
-            release("1.1.0-beta.1"),
-            release("1.0.1"),
-            release("1.0.0")
-        )
-
-        val selected = ReleaseSelector.eligibleReleases(releases, UpdateChannel.STABLE)
-
-        assertEquals(listOf("1.0.1", "1.0.0"), selected.map { it.tagName })
-    }
 
     @Test
-    fun `beta channel prefers final promotion over its betas`() {
+    fun `single channel lists final and pre-releases newest first`() {
         val releases = listOf(
             release("1.1.0-beta.10", prerelease = true),
             release("1.1.0"),
@@ -35,17 +22,6 @@ class ReleaseSelectorTest {
         )
     }
 
-    @Test
-    fun `legacy release title marks beta without tag suffix`() {
-        val releases = listOf(
-            release(tag = "0.7.18", name = "Beta 0.7.18 Hotfix"),
-            release(tag = "0.7.17")
-        )
-
-        val selected = ReleaseSelector.eligibleReleases(releases, UpdateChannel.STABLE)
-
-        assertEquals(listOf("0.7.17"), selected.map { it.tagName })
-    }
 
     @Test
     fun `drafts and invalid tags are excluded`() {
@@ -71,7 +47,7 @@ class ReleaseSelectorTest {
 
         val selected = ReleaseSelector.eligibleReleases(
             releases = releases,
-            channel = UpdateChannel.STABLE,
+            channel = UpdateChannel.BETA,
             canonicalAutoSyncOnly = true
         )
 
@@ -81,21 +57,6 @@ class ReleaseSelectorTest {
         )
     }
 
-    @Test
-    fun `stable autosync revision remains eligible while beta base does not`() {
-        val releases = listOf(
-            release("1.1.0-beta-autosync.1"),
-            release("1.0.0-autosync.3")
-        )
-
-        val selected = ReleaseSelector.eligibleReleases(
-            releases = releases,
-            channel = UpdateChannel.STABLE,
-            canonicalAutoSyncOnly = true
-        )
-
-        assertEquals(listOf("1.0.0-autosync.3"), selected.map { it.tagName })
-    }
 
     private fun release(
         tag: String,

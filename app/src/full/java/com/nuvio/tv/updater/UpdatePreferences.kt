@@ -58,7 +58,6 @@ class UpdatePreferences @Inject constructor(
 
     val updateChannel: Flow<UpdateChannel> = dataStore.data.map { prefs ->
         UpdateChannel.fromStoredValue(prefs[updateChannelKey])
-            ?: UpdateChannel.defaultForVersion(BuildConfig.VERSION_NAME)
     }
 
     val autoInstallEnabled: Flow<Boolean> = dataStore.data.map { prefs ->
@@ -84,15 +83,9 @@ class UpdatePreferences @Inject constructor(
     }
 
     suspend fun getOrInitializeUpdateChannel(): UpdateChannel {
-        val defaultChannel = UpdateChannel.defaultForVersion(BuildConfig.VERSION_NAME)
-        var resolvedChannel = defaultChannel
-        dataStore.edit { prefs ->
-            resolvedChannel = UpdateChannel.fromStoredValue(prefs[updateChannelKey])
-                .let { TesterChannel.followInstalledBuild(prefs, it, BuildConfig.VERSION_NAME) }
-                ?: defaultChannel
-            prefs[updateChannelKey] = resolvedChannel.storedValue
-        }
-        return resolvedChannel
+        val channel = UpdateChannel.defaultForVersion(BuildConfig.VERSION_NAME)
+        dataStore.edit { prefs -> prefs[updateChannelKey] = channel.storedValue }
+        return channel
     }
 
     suspend fun setIgnoredTag(tag: String?) {

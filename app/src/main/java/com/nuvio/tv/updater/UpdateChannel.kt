@@ -1,17 +1,17 @@
 package com.nuvio.tv.updater
 
+/**
+ * Nuvio CS has a single update channel that follows every published release, pre-releases
+ * included. Values stored by older builds ("stable", "tester") resolve to it as well.
+ */
 enum class UpdateChannel(val storedValue: String) {
-    STABLE("stable"),
-    BETA("beta"),
-    TESTER("tester"); // tester channel
+    BETA("beta");
 
     companion object {
-        fun fromStoredValue(value: String?): UpdateChannel? = entries.firstOrNull {
-            it.storedValue.equals(value, ignoreCase = true)
-        }
+        @Suppress("UNUSED_PARAMETER")
+        fun fromStoredValue(value: String?): UpdateChannel = BETA
 
-        fun defaultForVersion(versionName: String): UpdateChannel =
-            if (TesterChannel.isTesterVersion(versionName)) TESTER
-            else if (VersionUtils.isPrerelease(versionName)) BETA else STABLE
+        @Suppress("UNUSED_PARAMETER")
+        fun defaultForVersion(versionName: String): UpdateChannel = BETA
     }
 }

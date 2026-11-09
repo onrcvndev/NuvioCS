@@ -1,14 +1,15 @@
 package com.nuvio.tv.updater.model
 
-import com.nuvio.tv.updater.TesterChannel
+import com.nuvio.tv.updater.VersionUtils
 
-/** Persist release ordering with the APK so background installs also respect Beta/Tester moves. */
+/** The downloaded release, kept with its APK so a background install can tell it is still newer. */
 data class DownloadedUpdate(
     val tag: String,
     val path: String,
     val publishedAt: String?,
     val prerelease: Boolean
 ) {
+    @Suppress("UNUSED_PARAMETER")
     fun isNewerThan(versionName: String, versionCode: Long): Boolean =
-        TesterChannel.isRemoteNewer(tag, publishedAt, prerelease, versionName, versionCode)
+        VersionUtils.isRemoteNewer(tag, versionName)
 }

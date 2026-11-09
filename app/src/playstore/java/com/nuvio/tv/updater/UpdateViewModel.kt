@@ -19,7 +19,7 @@ data class UpdateUiState(
     val errorMessage: String? = null,
     val feedbackMessage: String? = null,
     val updateBannerEnabled: Boolean = false,
-    val updateChannel: UpdateChannel = UpdateChannel.STABLE,
+    val updateChannel: UpdateChannel = UpdateChannel.BETA,
     val autoInstallEnabled: Boolean = false,
     val autoInstallSupported: Boolean = false,
     val autoInstallNoticeEnabled: Boolean = false

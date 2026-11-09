@@ -19,33 +19,13 @@ class UpdateRepository @Inject constructor(
             val owner = BuildConfig.GITHUB_OWNER
             val repo = BuildConfig.GITHUB_REPO
 
-            val releases = if (BuildConfig.AUTOSYNC_FORK) {
-                // AutoSync uses upstream-version + an independent revision
-                // (for example 1.0.0-autosync.2), so inspect the release list
-                // rather than relying on GitHub's single "latest" pointer.
-                val response = gitHubReleaseApi.getReleases(owner = owner, repo = repo)
-                if (!response.isSuccessful) {
-                    error("GitHub API error: ${response.code()}")
-                }
-                response.body() ?: error("Empty GitHub release response")
-            } else {
-                when (channel) {
-                    UpdateChannel.STABLE -> {
-                        val response = gitHubReleaseApi.getLatestRelease(owner = owner, repo = repo)
-                        if (!response.isSuccessful) {
-                            error("GitHub API error: ${response.code()}")
-                        }
-                        listOf(response.body() ?: error("Empty GitHub release response"))
-                    }
-                    UpdateChannel.BETA, UpdateChannel.TESTER -> {
-                        val response = gitHubReleaseApi.getReleases(owner = owner, repo = repo)
-                        if (!response.isSuccessful) {
-                            error("GitHub API error: ${response.code()}")
-                        }
-                        response.body() ?: error("Empty GitHub release response")
-                    }
-                }
+            // One channel: every published release is a candidate, so read the list rather than
+            // GitHub's single "latest" pointer (which skips pre-releases).
+            val response = gitHubReleaseApi.getReleases(owner = owner, repo = repo)
+            if (!response.isSuccessful) {
+                error("GitHub API error: ${response.code()}")
             }
+            val releases = response.body() ?: error("Empty GitHub release response")
 
             val releaseWithAsset = ReleaseSelector
                 .eligibleReleases(

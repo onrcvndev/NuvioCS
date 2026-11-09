@@ -38,7 +38,7 @@ data class UpdateUiState(
     val errorMessage: String? = null,
     val feedbackMessage: String? = null,
     val updateBannerEnabled: Boolean = true,
-    val updateChannel: UpdateChannel = UpdateChannel.STABLE,
+    val updateChannel: UpdateChannel = UpdateChannel.BETA,
     val autoInstallEnabled: Boolean = false,
     val autoInstallSupported: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
     val autoInstallNoticeEnabled: Boolean = true,
@@ -103,10 +103,7 @@ class UpdateViewModel @Inject constructor(
 
             result
                 .onSuccess { update ->
-                    val remoteNewer = TesterChannel.isRemoteNewer(
-                        update.tag, update.publishedAt, update.prerelease,
-                        BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toLong()
-                    )
+                    val remoteNewer = VersionUtils.isRemoteNewer(update.tag, BuildConfig.VERSION_NAME)
                     val downloadedFile = if (remoteNewer) downloadStore.downloadedFileFor(update) else null
                     // The release just installed carries the notes the "updated" banner can show.
                     val installedUpdate = _uiState.value.installedUpdate?.let { installed ->
@@ -171,14 +168,9 @@ class UpdateViewModel @Inject constructor(
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun noUpdateFeedback(channel: UpdateChannel): String =
-        if (TesterChannel.isSwitching(channel, BuildConfig.VERSION_NAME)) {
-            context.getString(R.string.nuviocs_update_waiting_for_channel)
-        } else if (channel == UpdateChannel.STABLE && VersionUtils.isPrerelease(BuildConfig.VERSION_NAME)) {
-            context.getString(R.string.update_waiting_for_stable)
-        } else {
-            context.getString(R.string.update_latest_version)
-        }
+        context.getString(R.string.update_latest_version)
 
     fun dismissBanner() {
         val state = _uiState.value
@@ -335,7 +327,6 @@ class UpdateViewModel @Inject constructor(
     // Shows the "updated" banner once after the idle job installed a release, then forgets it.
     private suspend fun consumeAutoInstalledUpdate() {
         val tag = updatePreferences.autoInstalledTag.first() ?: return
-        // Tags from Beta and Tester do not have a meaningful semantic order across channels.
         // Only the exact installed release can produce the successful-install notice.
         if (tag != BuildConfig.VERSION_NAME && downloadStore.pendingInstall()?.first == tag) return
         updatePreferences.setAutoInstalledTag(null)

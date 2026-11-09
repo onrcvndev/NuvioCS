@@ -125,10 +125,6 @@
     <string name="nuviocs_formats_inject_hdr10_sub">HDR10 temel katmanı olarak oynatılan Dolby Vision Profil 8 için kaynağın mastering meta verilerini (MaxCLL, MaxFALL ve tepe parlaklık) ekler, böylece HDR10 TV\'ler doğru ton eşlemesi yapar. Yalnızca Oynatma ayarlarındaki DV işleme DV\'yi Kaldır veya HDR10 temel katmanı olduğunda etkindir.</string>
 
 
-    <!-- nuviocs_update_strings.xml -->
-    <string name="nuviocs_update_channel_tester">Test</string>
-    <string name="nuviocs_update_channel_tester_description">Hata bulmaya yardım edenler için erken test sürümleri. Bazı şeylerin bozulmasını bekleyin.</string>
-    <string name="nuviocs_update_waiting_for_channel">Bu kanala bir sonraki sürümüyle geçeceksiniz. O zamana kadar en son sürümdesiniz.</string>
 
     <!-- seek_preview_strings.xml -->
     <string name="player_seek_preview_sync">Önizleme Eşitleme</string>

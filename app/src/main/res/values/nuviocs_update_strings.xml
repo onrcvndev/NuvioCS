@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Nuvio CS tester update channel (TesterChannel.kt) -->
-    <string name="nuviocs_update_channel_tester">Tester</string>
-    <string name="nuviocs_update_channel_tester_description">Early test builds for people helping to find bugs. Expect things to break.</string>
-    <string name="nuviocs_update_waiting_for_channel">You’ll move to this channel with its next release. Until then you’re on the latest build.</string>
-</resources>

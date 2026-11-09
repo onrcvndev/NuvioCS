@@ -8,7 +8,6 @@ data class AppUpdate(
     val assetName: String,
     val assetUrl: String,
     val assetSizeBytes: Long?,
-    // tester channel switching (TesterChannel.isRemoteNewer)
     val publishedAt: String? = null,
     val prerelease: Boolean = false
 )

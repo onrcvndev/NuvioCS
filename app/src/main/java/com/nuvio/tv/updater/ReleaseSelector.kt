@@ -15,12 +15,10 @@ internal object ReleaseSelector {
     ): List<GitHubReleaseDto> = releases
         .asSequence()
         .filterNot(GitHubReleaseDto::draft)
-        .filter { release -> TesterChannel.belongsTo(release, channel) }
         .filter { release ->
             !canonicalAutoSyncOnly ||
                 VersionUtils.isCanonicalAutoSync(release.tagName) ||
-                VersionUtils.isCanonicalAutoSync(release.name) ||
-                TesterChannel.isTesterRelease(release)
+                VersionUtils.isCanonicalAutoSync(release.name)
         }
         .mapNotNull { release ->
             val version = releaseVersion(release) ?: return@mapNotNull null
@@ -30,7 +28,6 @@ internal object ReleaseSelector {
                 prerelease = isPrerelease(release, version)
             )
         }
-        .filter { candidate -> channel != UpdateChannel.STABLE || !candidate.prerelease }
         .sortedByDescending(ReleaseCandidate::version)
         .map(ReleaseCandidate::release)
         .toList()
