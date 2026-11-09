@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nuvio.tv.R
-import com.nuvio.tv.ui.reshaped.netflix.NetflixUiPreferences
+import com.nuvio.tv.ui.nuviocs.netflix.NetflixUiPreferences
 
 /** "Netflix-style Home" row: a purely visual Home look. Off by default. */
 internal fun LazyListScope.netflixUiSettingsItems(

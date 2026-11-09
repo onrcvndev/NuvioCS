@@ -8,7 +8,7 @@ data class AppUpdate(
     val assetName: String,
     val assetUrl: String,
     val assetSizeBytes: Long?,
-    // Nuvio RS hook: tester channel switching (TesterChannel.isRemoteNewer)
+    // tester channel switching (TesterChannel.isRemoteNewer)
     val publishedAt: String? = null,
     val prerelease: Boolean = false
 )

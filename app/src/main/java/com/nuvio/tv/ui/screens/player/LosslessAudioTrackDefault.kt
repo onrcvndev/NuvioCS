@@ -116,7 +116,7 @@ internal fun PlayerRuntimeController.applyLosslessAudioDefaultIfUnset(
 ) {
     if (audioTracks.isEmpty()) return
     if (losslessAudioDefaultAppliedForStream) return
-    if (!com.nuvio.tv.data.local.ReshapedFormatSettingsStore.current(context).enabled) return
+    if (!com.nuvio.tv.data.local.NuvioCsFormatSettingsStore.current(context).enabled) return
 
     val rememberedAudio = rememberedTrackPreference?.audio
     val persistedAudio = persistedTrackPreference?.audio

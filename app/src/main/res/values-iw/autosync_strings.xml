@@ -7,8 +7,8 @@
     <string name="autosync_toast_synced">Auto Sync • הכתוביות סונכרנו</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • עבר לכתובית שמתאימה יותר</string>
     <string name="autosync_toast_in_sync">Auto Sync • הכתוביות כבר מסונכרנות</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • הסנכרון נכשל • תזמון הכתוביות לא השתנה</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • אין כתוביות מוטמעות להשוואה • תזמון הכתוביות לא השתנה</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • פורמט הכתוביות אינו נתמך • תזמון הכתוביות לא השתנה</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • הסנכרון נכשל • תזמון הכתוביות לא השתנה</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • אין כתוביות מוטמעות להשוואה • תזמון הכתוביות לא השתנה</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • פורמט הכתוביות אינו נתמך • תזמון הכתוביות לא השתנה</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • לא נמצאה התאמה • מסנכרן לפי השמע…</string>
 </resources>

@@ -115,7 +115,7 @@ internal fun PlayerDebugStatsOverlay(
                     nativeMemoryBytes = viewModel.getPlayerNativeMemoryBytes()
                 )
             }
-            val formatsRows = viewModel.controller.formatsDebugStats() // Nuvio RS hook: Arc audio path / DV rows
+            val formatsRows = viewModel.controller.formatsDebugStats() // Arc audio path / DV rows
             stats = withContext(Dispatchers.IO) { sampler.sample(snapshot) } + formatsRows
             delay(1000L)
         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Subtitle AutoSync strings the fork adds; Nuvio's own AutoSync strings live in strings.xml. -->
 <resources>
-    <!-- Settings (Nuvio Reshaped) -->
+    <!-- Settings (Nuvio CS) -->
     <string name="autosync_debug_logs_title">Debug Logs for Auto Sync</string>
     <string name="autosync_debug_logs_description">Save a detailed Auto Sync timing report and copy it to the clipboard, for reporting difficult subtitle cases.</string>
 
@@ -10,8 +10,8 @@
     <string name="autosync_toast_synced">Auto Sync • Subtitles synced</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Switched to a better-matching subtitle</string>
     <string name="autosync_toast_in_sync">Auto Sync • Subtitles already in sync</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Sync failed • subtitle timing not changed</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • No embedded subtitles to compare with • subtitle timing not changed</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Subtitle format not supported • subtitle timing not changed</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Sync failed • subtitle timing not changed</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • No embedded subtitles to compare with • subtitle timing not changed</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Subtitle format not supported • subtitle timing not changed</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • No match found • syncing to the audio instead…</string>
 </resources>

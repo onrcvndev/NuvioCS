@@ -42,7 +42,7 @@ import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.nuvio.tv.R
-import com.nuvio.tv.ui.reshaped.debuglog.DebugLogQrDialog
+import com.nuvio.tv.ui.nuviocs.debuglog.DebugLogQrDialog
 import com.nuvio.tv.ui.screens.player.audiosync.AudioSyncFallback
 import com.nuvio.tv.ui.screens.player.autosync.AutoSyncPreferences
 import com.nuvio.tv.ui.screens.player.audiosync.AudioSyncSettings

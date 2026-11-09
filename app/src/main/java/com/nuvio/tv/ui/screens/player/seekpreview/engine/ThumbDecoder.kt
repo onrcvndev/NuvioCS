@@ -37,7 +37,7 @@ internal object ThumbNative {
             val now = android.os.SystemClock.elapsedRealtime()
             if (!retry.mayTry(now)) return false
             try {
-                if (!libraryLoaded) { System.loadLibrary("reshaped_preview"); libraryLoaded = true }
+                if (!libraryLoaded) { System.loadLibrary("nuviocs_preview"); libraryLoaded = true }
                 if (nativeInit()) { ready = true; return true }
             } catch (error: LinkageError) { PreviewDiagnostics.note("native load failed: ${error.message}") }
             retry.failed(now)

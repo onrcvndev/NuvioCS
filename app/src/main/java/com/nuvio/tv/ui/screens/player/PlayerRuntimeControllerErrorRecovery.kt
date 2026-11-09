@@ -329,7 +329,7 @@ internal fun PlayerRuntimeController.scheduleStableProgressReset() {
         val player = _exoPlayer ?: return@launch
         if (player.playbackState == Player.STATE_READY && player.isPlaying) {
             resetErrorRetryState()
-            noteFormatsStablePlayback(player, playingSinceMs) // Nuvio RS hook: Arc formats
+            noteFormatsStablePlayback(player, playingSinceMs) // Arc formats
         }
     }
 }

@@ -88,7 +88,7 @@ class UpdatePreferences @Inject constructor(
         var resolvedChannel = defaultChannel
         dataStore.edit { prefs ->
             resolvedChannel = UpdateChannel.fromStoredValue(prefs[updateChannelKey])
-                .let { TesterChannel.followInstalledBuild(prefs, it, BuildConfig.VERSION_NAME) } // Nuvio RS hook
+                .let { TesterChannel.followInstalledBuild(prefs, it, BuildConfig.VERSION_NAME) }
                 ?: defaultChannel
             prefs[updateChannelKey] = resolvedChannel.storedValue
         }

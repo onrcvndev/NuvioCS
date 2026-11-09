@@ -25,7 +25,7 @@ internal object NativeTapDecoder {
             ByteArray(buffer.remaining()).also(buffer::get)
         } }.fold(ByteArray(0)) { all, bytes -> all + bytes }
         if (init.size > ThumbReads.MAX_PREFIX) return null
-        val dvProfile = format.getString("reshaped-codecs")?.split('.')?.getOrNull(1)?.toIntOrNull()
+        val dvProfile = format.getString("nuviocs-codecs")?.split('.')?.getOrNull(1)?.toIntOrNull()
         val track = VideoTrack(codec, int(MediaFormat.KEY_WIDTH), int(MediaFormat.KEY_HEIGHT), 0.0, 4,
             if (codec.nal) init else ByteArray(0), if (transfer in setOf(16, 18)) 10 else 8,
             ContainerColour(transfer, if (standard == 6) 9 else 0, if (standard == 6) 9 else 0, range),

@@ -14,9 +14,9 @@
     <string name="autosync_toast_synced">Auto Sync • Undertexter synkroniserade</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Bytte till en undertext som passar bättre</string>
     <string name="autosync_toast_in_sync">Auto Sync • Undertexterna är redan synkroniserade</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Synkroniseringen misslyckades • undertextens tidsinställning är oförändrad</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Inga inbäddade undertexter att jämföra med • undertextens tidsinställning är oförändrad</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Undertextformatet stöds inte • undertextens tidsinställning är oförändrad</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Synkroniseringen misslyckades • undertextens tidsinställning är oförändrad</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Inga inbäddade undertexter att jämföra med • undertextens tidsinställning är oförändrad</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Undertextformatet stöds inte • undertextens tidsinställning är oförändrad</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Ingen matchning hittades • synkroniserar mot ljudet i stället…</string>
     <string name="autosync_label_synced">Automatiskt synkroniserad</string>
 </resources>

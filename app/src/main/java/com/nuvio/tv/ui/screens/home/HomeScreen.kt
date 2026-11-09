@@ -364,9 +364,9 @@ fun HomeScreen(
                                 )
                         }
                     ) {
-                        // Nuvio RS hook: Netflix-style Home (purely visual, off by default)
-                        if (com.nuvio.tv.ui.reshaped.netflix.rememberNetflixUiEnabled()) {
-                            com.nuvio.tv.ui.reshaped.netflix.NetflixHomeRoute(
+                        // Netflix-style Home (purely visual, off by default)
+                        if (com.nuvio.tv.ui.nuviocs.netflix.rememberNetflixUiEnabled()) {
+                            com.nuvio.tv.ui.nuviocs.netflix.NetflixHomeRoute(
                                 viewModel = viewModel,
                                 uiState = uiState,
                                 posterCardStyle = posterCardStyle,

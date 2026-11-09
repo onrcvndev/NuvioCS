@@ -19,7 +19,7 @@ Sessions stop on source replacement or disabling. Session ownership and player/l
 - Smaller-copy generation, timing/edition checks, visual verification, fitted image reuse, and cached-release borrowing. Discovery can begin before the requested original target has been cached. Ready HTTP file links and already-resolved app debrid links are provided through `CopySources`. No new torrent/account jobs are created for previews.
 - Next-episode preparation consumes the source search Nuvio already preloads; it does not launch another addon search. Strong devices may prepare 4K; small devices retain Arc's 1080p restriction for this side work. Unfinished original 4K coverage may continue for at most ten minutes after closing the player; media-server streams never do.
 
-## Reshaped improvements and retained providers
+## Nuvio CS improvements and retained providers
 
 ### Preview latency and resource ownership
 
@@ -133,6 +133,6 @@ Arc's account-managed TorBox/Premiumize copy creation/removal and its newer medi
 
 ## Verification
 
-The feature CI workflow compiles the Android integration, runs preview tests and builds all native ABIs. Host checks compile the actual engine against the bundled Media3 AARs, run the inherited Arc policy tests plus Reshaped transport/cache/tap tests, and run `scripts/test_seek_preview_native.py`. Host boundary stubs are only an additional syntax check; they do not replace an Android app build.
+The feature CI workflow compiles the Android integration, runs preview tests and builds all native ABIs. Host checks compile the actual engine against the bundled Media3 AARs, run the inherited Arc policy tests plus Nuvio CS transport/cache/tap tests, and run `scripts/test_seek_preview_native.py`. Host boundary stubs are only an additional syntax check; they do not replace an Android app build.
 
 Real-device checks remain necessary for sustained 1080p/4K HDR/DV playback on 2 GB TVs, scrubbing under slow/rate-limited networks, source changes, pause/resume, low storage and long sessions. No physical-TV performance or crash-rate claim is implied by source and host tests.

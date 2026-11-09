@@ -1045,10 +1045,8 @@ open class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    val liveTvMenuItem = com.nuvio.tv.ui.reshaped.livetv.rememberLiveTvMenuItem(currentRoute, navController) // Nuvio RS hook: Live TV menu entry
-                    val rootRoutes = remember(discoverLocation, liveTvMenuItem) {
+                    val rootRoutes = remember(discoverLocation) {
                         buildSet {
-                            liveTvMenuItem?.let { add(it.route) } // Nuvio RS hook: Live TV menu entry
                             add(Screen.Home.route)
                             add(Screen.Search.route)
                             add(Screen.Library.route)
@@ -1070,8 +1068,7 @@ open class MainActivity : ComponentActivity() {
                         strNavSearch,
                         strNavLibrary,
                         strNavSettings,
-                        discoverLocation,
-                        liveTvMenuItem
+                        discoverLocation
                     ) {
                         buildList {
                             add(
@@ -1104,7 +1101,6 @@ open class MainActivity : ComponentActivity() {
                                     iconRes = R.raw.sidebar_library
                                 )
                             )
-                            liveTvMenuItem?.let(::add) // Nuvio RS hook: Live TV menu entry
                             add(
                                 DrawerItem(
                                     route = Screen.Settings.route,
@@ -1168,9 +1164,9 @@ open class MainActivity : ComponentActivity() {
                         }
                         Box(modifier = Modifier.fillMaxSize()) {
                             CompositionLocalProvider(LocalNavViewModelStoreOwner provides navViewModelStoreOwner) {
-                                // Nuvio RS hook: optional top pill menu replaces the sidebar
-                                if (com.nuvio.tv.ui.reshaped.pillnav.rememberPillNavEnabled()) {
-                                    com.nuvio.tv.ui.reshaped.pillnav.PillNavScaffold(
+                                // optional top pill menu replaces the sidebar
+                                if (com.nuvio.tv.ui.nuviocs.pillnav.rememberPillNavEnabled()) {
+                                    com.nuvio.tv.ui.nuviocs.pillnav.PillNavScaffold(
                                         longPressBackHeld = longPressBackHeld, navController = navController, startDestination = startDestination,
                                         currentRoute = currentRoute, rootRoutes = rootRoutes, drawerItems = drawerItems, selectedDrawerRoute = selectedDrawerRoute,
                                         blurEnabled = modernSidebarBlurEnabled, activeProfileName = activeProfile?.name ?: "",

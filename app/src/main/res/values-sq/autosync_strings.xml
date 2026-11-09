@@ -14,9 +14,9 @@
     <string name="autosync_toast_synced">Auto Sync • Titrat u sinkronizuan</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • U kalua te titra që përputhen më mirë</string>
     <string name="autosync_toast_in_sync">Auto Sync • Titrat janë tashmë të sinkronizuara</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Sinkronizimi dështoi • koha e titrave nuk ndryshoi</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Nuk ka titra të përfshira për krahasim • koha e titrave nuk ndryshoi</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Formati i titrave nuk mbështetet • koha e titrave nuk ndryshoi</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Sinkronizimi dështoi • koha e titrave nuk ndryshoi</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Nuk ka titra të përfshira për krahasim • koha e titrave nuk ndryshoi</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Formati i titrave nuk mbështetet • koha e titrave nuk ndryshoi</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Nuk u gjet përputhje • po sinkronizohet me audion…</string>
     <string name="autosync_label_synced">Sinkronizuar automatikisht</string>
 </resources>

@@ -103,8 +103,6 @@ internal fun PlayerRuntimeController.prefetchAutoSyncIndex(
     url: String,
     headers: Map<String, String>,
 ) {
-    // A live channel has no subtitle index, and a second connection can take its provider's only slot.
-    if (com.nuvio.tv.reshaped.livetv.LiveTvPlaybackRegistry.isLiveTv(url)) return
     AutoSyncPreferences.ensureLoaded(context)
     if (!AutoSyncPreferences.isEnabled(context)) return
     EmbeddedSubtitleTimelineLoader.prefetch(scope, url, headers)
@@ -163,7 +161,7 @@ internal fun PlayerRuntimeController.maybeRunAutomaticSubtitleSync(
     }
 
     if (!canAttachAddonSubtitleViaSidecar(selectedSubtitle)) {
-        showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.reshaped_autosync_toast_failed_unsupported))
+        showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.nuviocs_autosync_toast_failed_unsupported))
         return
     }
 
@@ -190,7 +188,7 @@ internal fun PlayerRuntimeController.maybeRunAutomaticSubtitleSync(
         },
     )
     if (!started) {
-        showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.reshaped_autosync_toast_failed))
+        showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.nuviocs_autosync_toast_failed))
         return
     }
 
@@ -419,7 +417,7 @@ internal fun PlayerRuntimeController.maybeRunAutomaticSubtitleSync(
                     context,
                     "REJECT V2 - sidecar changed or apply failed",
                 )
-                showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.reshaped_autosync_toast_failed))
+                showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.nuviocs_autosync_toast_failed))
                 return@launch
             }
 
@@ -483,7 +481,7 @@ internal fun PlayerRuntimeController.maybeRunAutomaticSubtitleSync(
             if (activeSidecarSubtitleKey == null) {
                 startSidecarAddonSubtitle(selectedSubtitle)
             }
-            showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.reshaped_autosync_toast_failed))
+            showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.nuviocs_autosync_toast_failed))
         }
     }.also { job ->
         job.invokeOnCompletion { selectedBodyDeferred.complete(null) }
@@ -606,7 +604,7 @@ private fun PlayerRuntimeController.runMpvAutomaticSubtitleSync(
                     language = PlayerSubtitleUtils.normalizeLanguageCode(chosenSubtitle.lang),
                 ) == true
                 if (!added) {
-                    showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.reshaped_autosync_toast_failed))
+                    showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.nuviocs_autosync_toast_failed))
                     return@launch
                 }
                 keepMpvPlayingIfNeeded(wasPlaying)
@@ -647,7 +645,7 @@ private fun PlayerRuntimeController.runMpvAutomaticSubtitleSync(
         } catch (error: Throwable) {
             Log.w(PlayerRuntimeController.TAG, "AUTO_SYNC_V2 mpv failed", error)
             if (streamUnchanged() && _uiState.value.selectedAddonSubtitle?.url == selectedUrl) {
-                showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.reshaped_autosync_toast_failed))
+                showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.nuviocs_autosync_toast_failed))
             }
         }
     }
@@ -807,7 +805,7 @@ private fun PlayerRuntimeController.runLibassAutomaticSubtitleSync(
             throw cancel
         } catch (error: Throwable) {
             Log.w(PlayerRuntimeController.TAG, "AUTO_SYNC_V2 libass failed", error)
-            if (stillRelevant()) showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.reshaped_autosync_toast_failed))
+            if (stillRelevant()) showAutoSyncToast(AutoSyncBubbleKind.Failure, context.getString(R.string.nuviocs_autosync_toast_failed))
         }
     }
 }
@@ -911,11 +909,11 @@ private fun Context.buildAutoSyncFailureToast(analysisOutcome: AutoSyncAnalysisO
         when (analysisOutcome) {
             AutoSyncAnalysisOutcome.NO_SUBTITLE_TRACKS,
             AutoSyncAnalysisOutcome.NO_USABLE_REFERENCE,
-            -> R.string.reshaped_autosync_toast_failed_no_reference
+            -> R.string.nuviocs_autosync_toast_failed_no_reference
             AutoSyncAnalysisOutcome.NO_FIT -> R.string.autosync_toast_no_fit
             AutoSyncAnalysisOutcome.INCONCLUSIVE,
             AutoSyncAnalysisOutcome.SUBTITLE_UNAVAILABLE,
             null,
-            -> R.string.reshaped_autosync_toast_failed
+            -> R.string.nuviocs_autosync_toast_failed
         },
     )

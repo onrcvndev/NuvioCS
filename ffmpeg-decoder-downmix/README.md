@@ -32,9 +32,9 @@ These can be set in `local.properties` or environment variables. See `local.exam
 3. Rebuild the patched AAR after validating local decoder changes with `:ffmpeg-decoder-downmix:assembleRelease`.
 4. Replace `app/libs/lib-decoder-ffmpeg-release.aar` with `ffmpeg-decoder-downmix/build/outputs/aar/ffmpeg-decoder-downmix-release.aar`.
 
-## Reshaped combined decoder (2026-11-02)
+## Nuvio CS combined decoder (2026-11-02)
 
-The prebuilt combines upstream LFE downmix control with Reshaped per-format AC-3 transcode policy and end-of-stream draining/silence trimming. Java and JNI signatures include both LFE level and the end-of-stream flag.
+The prebuilt combines upstream LFE downmix control with Nuvio CS per-format AC-3 transcode policy and end-of-stream draining/silence trimming. Java and JNI signatures include both LFE level and the end-of-stream flag.
 
 Built from FFmpeg n7.1.4 using NDK 29.0.14206865, Android API 24, static avcodec/swresample/avutil and static libc++, for armeabi-v7a, arm64-v8a, x86 and x86_64. Native ELF segments use 16 KiB alignment. Enabled decoders: aac, mp3, ac3, eac3, truehd, dca, vorbis, opus, amrnb, amrwb, flac, alac, pcm_mulaw, pcm_alaw, h264 and hevc; encoder: ac3. The prebuilt retains the existing video decoder classes.
 

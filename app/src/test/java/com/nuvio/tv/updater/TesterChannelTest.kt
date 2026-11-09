@@ -128,7 +128,7 @@ class TesterChannelTest {
 
     private fun release(tag: String, prerelease: Boolean = false) = GitHubReleaseDto(
         tagName = tag,
-        name = "Nuvio Reshaped $tag",
+        name = "Nuvio CS $tag",
         prerelease = prerelease
     )
 

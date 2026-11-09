@@ -7,8 +7,8 @@
     <string name="autosync_toast_synced">Auto Sync • Đã đồng bộ phụ đề</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Đã chuyển sang phụ đề khớp hơn</string>
     <string name="autosync_toast_in_sync">Auto Sync • Phụ đề đã đồng bộ sẵn</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Đồng bộ thất bại • thời gian phụ đề không thay đổi</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Không có phụ đề nhúng để so sánh • thời gian phụ đề không thay đổi</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Định dạng phụ đề không được hỗ trợ • thời gian phụ đề không thay đổi</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Đồng bộ thất bại • thời gian phụ đề không thay đổi</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Không có phụ đề nhúng để so sánh • thời gian phụ đề không thay đổi</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Định dạng phụ đề không được hỗ trợ • thời gian phụ đề không thay đổi</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Không tìm thấy kết quả khớp • đang đồng bộ theo âm thanh…</string>
 </resources>

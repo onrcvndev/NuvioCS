@@ -6,7 +6,7 @@ import com.nuvio.tv.data.remote.dto.GitHubReleaseDto
 import java.time.Instant
 
 /**
- * Nuvio RS "Tester" update channel: builds for people who help find bugs, published from
+ * Nuvio CS "Tester" update channel: builds for people who help find bugs, published from
  * subtitle-autosync-tester (autosync-tester-release.yml) as `<nuvio version>-tester.N`.
  *
  * Tester releases are pre-releases whose tags never end in `-autosync.N`, so Stable and Beta
@@ -23,7 +23,7 @@ internal object TesterChannel {
     // this lead; canonical stable releases from 1.1.0 use the same scheme.
     private const val BETA_LINE_VERSION_CODE_LEAD = 100_000_000L
 
-    private val installedTesterBuildKey = booleanPreferencesKey("reshaped_installed_tester_build")
+    private val installedTesterBuildKey = booleanPreferencesKey("nuviocs_installed_tester_build")
 
     fun isTesterVersion(raw: String?): Boolean =
         !raw.isNullOrBlank() && testerTagPattern.matches(raw.trim())

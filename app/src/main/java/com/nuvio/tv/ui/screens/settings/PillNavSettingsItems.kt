@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nuvio.tv.R
-import com.nuvio.tv.ui.reshaped.pillnav.PillNavPreferences
+import com.nuvio.tv.ui.nuviocs.pillnav.PillNavPreferences
 
 /** "Pill menu" row: a floating top menu that replaces the sidebar. Off by default. */
 internal fun LazyListScope.pillNavSettingsItems(
@@ -20,8 +20,8 @@ internal fun LazyListScope.pillNavSettingsItems(
         val context = LocalContext.current
         PillNavPreferences.ensureLoaded(context)
         val checked by PillNavPreferences.enabled.collectAsStateWithLifecycle()
-        com.nuvio.tv.ui.reshaped.netflix.NetflixUiPreferences.ensureLoaded(context)
-        val forcedByNetflixUi by com.nuvio.tv.ui.reshaped.netflix.NetflixUiPreferences.enabled.collectAsStateWithLifecycle()
+        com.nuvio.tv.ui.nuviocs.netflix.NetflixUiPreferences.ensureLoaded(context)
+        val forcedByNetflixUi by com.nuvio.tv.ui.nuviocs.netflix.NetflixUiPreferences.enabled.collectAsStateWithLifecycle()
 
         ToggleSettingsItem(
             icon = Icons.Default.Menu,

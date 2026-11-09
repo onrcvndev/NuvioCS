@@ -16,7 +16,7 @@ internal enum class SettingsCategory(val group: SettingsRailGroup) {
     LAYOUT(SettingsRailGroup.LOOK),
     CONTENT_DISCOVERY(SettingsRailGroup.WATCH),
     PLAYBACK(SettingsRailGroup.WATCH),
-    NUVIO_RESHAPED(SettingsRailGroup.WATCH), // Nuvio RS hook
+    NUVIO_CS(SettingsRailGroup.WATCH),
     INTEGRATION(SettingsRailGroup.SERVICES),
     TRACKING(SettingsRailGroup.SERVICES),
     ADVANCED(SettingsRailGroup.SYSTEM),

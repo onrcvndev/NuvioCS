@@ -552,7 +552,7 @@ class StreamScreenViewModel @Inject constructor(
                 contentId?.let { bingeGroupCacheDataStore.getInfoHash(it) }
             } else null
 
-            // Nuvio RS: one connection snapshot per load, taken once the runtime is known.
+            // Nuvio CS: one connection snapshot per load, taken once the runtime is known.
             var connectionFit: StreamConnectionFit? = null
             var connectionFitCaptured = false
 

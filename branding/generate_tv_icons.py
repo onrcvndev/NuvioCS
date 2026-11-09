@@ -1,4 +1,4 @@
-"""Builds the Nuvio RS TV icons (launcher, TV banner, splash mark) from nuvio-rs-logo.png.
+"""Builds the Nuvio CS TV icons (launcher, TV banner, splash mark) from nuvio-rs-logo.png.
 
 Usage: python3 branding/generate_tv_icons.py branding/nuvio-rs-logo.png app/src/main/res preview.png
 """
@@ -53,7 +53,7 @@ try:
 except Exception:
     pass
 draw = ImageDraw.Draw(banner)
-text = "Nuvio RS"
+text = "Nuvio CS"
 bbox = draw.textbbox((0, 0), text, font=font)
 gap = -40  # the logo canvas has transparent margins around the mark
 group = logo_size + gap + (bbox[2] - bbox[0])

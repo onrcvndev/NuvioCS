@@ -13,7 +13,7 @@ internal fun PlayerRuntimeController.releasePlayer() {
 internal fun PlayerRuntimeController.releasePlayer(
     flushPlaybackState: Boolean,
     keepTorrentStream: Boolean = false,
-    preserveRecovery: Boolean = false // Nuvio RS hook: Arc formats recovery survives its own rebuild
+    preserveRecovery: Boolean = false // Arc formats recovery survives its own rebuild
 ) {
     if (!preserveRecovery) {
         playbackRecoveryJob?.cancel()
@@ -85,7 +85,7 @@ internal fun PlayerRuntimeController.releasePlayer(
     hideSubtitleDelayOverlayJob?.cancel()
     subtitleAutoSyncLoadJob?.cancel()
     cancelAutomaticSubtitleSync() // AutoSync hook
-    com.nuvio.tv.ui.screens.player.seekpreview.local.LocalPreviewSources.unregister(this) // Nuvio RS hook: on-device seek previews
+    com.nuvio.tv.ui.screens.player.seekpreview.local.LocalPreviewSources.unregister(this) // on-device seek previews
     stopSidecarAddonSubtitle(clearView = true)
     subtitleTimingRefreshJob?.cancel()
     subtitleTimingRefreshJob = null
@@ -124,7 +124,7 @@ internal fun PlayerRuntimeController.releasePlayer(
     currentBitrateAwareLoadControl = null
     currentParallelChunkOverheadMb = 0
     ffmpegAudioRenderer = null
-    isAudioOutputBypassing = false // Nuvio RS hook: no player, no bypass
+    isAudioOutputBypassing = false // no player, no bypass
     updateAudioControlAvailability()
     playbackSpeedAwareAudioSink = null
     resetPlaybackTimeline()

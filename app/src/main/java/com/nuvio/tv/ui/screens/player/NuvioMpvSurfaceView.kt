@@ -286,7 +286,7 @@ class NuvioMpvSurfaceView @JvmOverloads constructor(
     fun applyAudioAmplificationDb(db: Int) {
         if (!initialized) return
         val clampedDb = db.coerceIn(AUDIO_AMPLIFICATION_MIN_DB, AUDIO_AMPLIFICATION_MAX_DB)
-        // Nuvio RS: mpv volume is cubic (gain = (volume/100)^3), so +N dB is 10^(N/60), not 10^(N/20).
+        // Nuvio CS: mpv volume is cubic (gain = (volume/100)^3), so +N dB is 10^(N/60), not 10^(N/20).
         val linearScale = 10.0.pow(clampedDb / 60.0)
         val targetVolumePercent = (100.0 * linearScale).coerceIn(0.0, MPV_MAX_VOLUME_PERCENT)
         runCatching {
@@ -767,8 +767,8 @@ class NuvioMpvSurfaceView @JvmOverloads constructor(
         mpv.setOptionString("sub-ass-override", "no")
         mpv.setOptionString("sub-codepage", "auto:utf-8")
         mpv.setOptionString("sub-font", "Roboto")
-        // Nuvio RS hook: custom subtitle font (replaces Roboto when one is imported)
-        com.nuvio.tv.reshaped.subtitlefont.SubtitleFontStore.mpvOptions(context).forEach { (name, value) -> mpv.setOptionString(name, value) }
+        // custom subtitle font (replaces Roboto when one is imported)
+        com.nuvio.tv.nuviocs.subtitlefont.SubtitleFontStore.mpvOptions(context).forEach { (name, value) -> mpv.setOptionString(name, value) }
         mpv.setOptionString("sub-use-margins", "yes")
         mpv.setOptionString("sub-ass-force-margins", "yes")
         mpv.setOptionString(

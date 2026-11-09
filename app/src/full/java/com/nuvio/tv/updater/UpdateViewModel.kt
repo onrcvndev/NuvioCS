@@ -103,11 +103,10 @@ class UpdateViewModel @Inject constructor(
 
             result
                 .onSuccess { update ->
-                    val remoteNewer = TesterChannel.isRemoteNewer( // Nuvio RS hook: tester channel
+                    val remoteNewer = TesterChannel.isRemoteNewer(
                         update.tag, update.publishedAt, update.prerelease,
                         BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toLong()
-                    ) ||
-                        ReshapedBridge.offersReshaped(context, update) // Nuvio RS hook
+                    )
                     val downloadedFile = if (remoteNewer) downloadStore.downloadedFileFor(update) else null
                     // The release just installed carries the notes the "updated" banner can show.
                     val installedUpdate = _uiState.value.installedUpdate?.let { installed ->
@@ -173,8 +172,8 @@ class UpdateViewModel @Inject constructor(
     }
 
     private fun noUpdateFeedback(channel: UpdateChannel): String =
-        if (TesterChannel.isSwitching(channel, BuildConfig.VERSION_NAME)) { // Nuvio RS hook
-            context.getString(R.string.reshaped_update_waiting_for_channel)
+        if (TesterChannel.isSwitching(channel, BuildConfig.VERSION_NAME)) {
+            context.getString(R.string.nuviocs_update_waiting_for_channel)
         } else if (channel == UpdateChannel.STABLE && VersionUtils.isPrerelease(BuildConfig.VERSION_NAME)) {
             context.getString(R.string.update_waiting_for_stable)
         } else {

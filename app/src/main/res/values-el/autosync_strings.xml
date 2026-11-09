@@ -7,8 +7,8 @@
     <string name="autosync_toast_synced">Auto Sync • Οι υπότιτλοι συγχρονίστηκαν</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Έγινε εναλλαγή σε υπότιτλο με καλύτερη αντιστοίχιση</string>
     <string name="autosync_toast_in_sync">Auto Sync • Οι υπότιτλοι είναι ήδη συγχρονισμένοι</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Ο συγχρονισμός απέτυχε • ο χρονισμός των υποτίτλων δεν άλλαξε</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Δεν υπάρχουν ενσωματωμένοι υπότιτλοι για σύγκριση • ο χρονισμός των υποτίτλων δεν άλλαξε</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Η μορφή υποτίτλων δεν υποστηρίζεται • ο χρονισμός των υποτίτλων δεν άλλαξε</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Ο συγχρονισμός απέτυχε • ο χρονισμός των υποτίτλων δεν άλλαξε</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Δεν υπάρχουν ενσωματωμένοι υπότιτλοι για σύγκριση • ο χρονισμός των υποτίτλων δεν άλλαξε</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Η μορφή υποτίτλων δεν υποστηρίζεται • ο χρονισμός των υποτίτλων δεν άλλαξε</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Δεν βρέθηκε αντιστοίχιση • συγχρονισμός με τον ήχο…</string>
 </resources>

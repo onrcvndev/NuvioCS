@@ -14,9 +14,9 @@
     <string name="autosync_toast_synced">Auto Sync • Podnapisi so sinhronizirani</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Preklopljeno na podnapise, ki se bolje ujemajo</string>
     <string name="autosync_toast_in_sync">Auto Sync • Podnapisi so že sinhronizirani</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Sinhronizacija ni uspela • časi podnapisov niso spremenjeni</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Ni vdelanih podnapisov za primerjavo • časi podnapisov niso spremenjeni</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Oblika podnapisov ni podprta • časi podnapisov niso spremenjeni</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Sinhronizacija ni uspela • časi podnapisov niso spremenjeni</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Ni vdelanih podnapisov za primerjavo • časi podnapisov niso spremenjeni</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Oblika podnapisov ni podprta • časi podnapisov niso spremenjeni</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Ujemanja ni bilo mogoče najti • sinhronizacija z zvokom…</string>
     <string name="autosync_label_synced">Samodejno sinhronizirano</string>
 </resources>

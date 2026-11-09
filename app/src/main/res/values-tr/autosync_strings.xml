@@ -7,8 +7,8 @@
     <string name="autosync_toast_synced">Auto Sync • Altyazılar eşitlendi</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Daha iyi eşleşen bir altyazıya geçildi</string>
     <string name="autosync_toast_in_sync">Auto Sync • Altyazılar zaten eşit</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Eşitleme başarısız • altyazı zamanlaması değişmedi</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Karşılaştırılacak gömülü altyazı yok • altyazı zamanlaması değişmedi</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Altyazı biçimi desteklenmiyor • altyazı zamanlaması değişmedi</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Eşitleme başarısız • altyazı zamanlaması değişmedi</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Karşılaştırılacak gömülü altyazı yok • altyazı zamanlaması değişmedi</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Altyazı biçimi desteklenmiyor • altyazı zamanlaması değişmedi</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Eşleşme bulunamadı • bunun yerine sese göre eşitleniyor…</string>
 </resources>

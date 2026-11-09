@@ -59,7 +59,7 @@ internal object VersionUtils {
             "(?:-([0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*))?" +
             "(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
     )
-    // Nuvio RS tester builds (`-tester.N`) count their revisions the same way.
+    // Nuvio CS tester builds (`-tester.N`) count their revisions the same way.
     private val autoSyncSuffixPattern = Regex(
         "^(.*)-(?:autosync|tester)(?:\\.(\\d+))?$",
         RegexOption.IGNORE_CASE

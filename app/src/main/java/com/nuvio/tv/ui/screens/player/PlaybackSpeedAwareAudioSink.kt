@@ -39,7 +39,7 @@ internal class PlaybackSpeedAwareAudioSink(
     platformSink: DefaultAudioSink? = null,
     // Encodings the platform sink was pinned to when built; null when it follows the output live.
     val pinnedOutputEncodings: Set<Int>? = null,
-    // Nuvio RS: false with Settings > Nuvio Reshaped > formats off, so passthrough timing stays NuvioTV's own.
+    // Nuvio CS: false with Settings > Nuvio CS > formats off, so passthrough timing stays NuvioTV's own.
     private val arcPacing: Boolean = true
 ) : ForwardingAudioSink(sink) {
 

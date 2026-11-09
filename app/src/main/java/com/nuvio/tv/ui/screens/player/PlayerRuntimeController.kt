@@ -385,7 +385,7 @@ class PlayerRuntimeController(
         )
         val isLive = LivePlaybackUiPolicy.isLivePlayback(
             playerReportsLive = playerReportsLive,
-            contentType = contentType.takeUnless { com.nuvio.tv.reshaped.livetv.LiveTvPlaybackRegistry.isCatchup(currentStreamUrl) }, // Nuvio RS hook: Live TV catch-up seeks like a film
+            contentType = contentType,
             latchedLive = livePlaybackLatched
         )
         val watched = liveWatchClock.watchedDurationMs(
@@ -420,7 +420,7 @@ class PlayerRuntimeController(
     @Volatile var exoPlayerView: androidx.media3.ui.PlayerView? = null
     internal var _loadControl: DefaultLoadControl? = null
     internal var playbackSpeedAwareAudioSink: PlaybackSpeedAwareAudioSink? = null
-    // Nuvio RS hook: Arc sound/picture format handling state (see PlayerFormatsHooks.kt).
+    // Arc sound/picture format handling state (see PlayerFormatsHooks.kt).
     internal var formatsActiveForCurrentPlayback: Boolean = false
     internal val playbackRecoveryGate = PlaybackRecoveryGate()
     internal var playbackRecoveryJob: Job? = null

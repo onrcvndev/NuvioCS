@@ -23,7 +23,7 @@ class SettingsCatalogTest {
                 SettingsCategory.LAYOUT,
                 SettingsCategory.CONTENT_DISCOVERY,
                 SettingsCategory.PLAYBACK,
-                SettingsCategory.NUVIO_RESHAPED,
+                SettingsCategory.NUVIO_CS,
                 SettingsCategory.INTEGRATION,
                 SettingsCategory.TRACKING,
                 SettingsCategory.ADVANCED,
@@ -54,10 +54,10 @@ class SettingsCatalogTest {
     }
 
     @Test
-    fun `reshaped settings remain reachable for every profile mode and build`() {
+    fun `nuviocs settings remain reachable for every profile mode and build`() {
         allCombinations().forEach { categories ->
-            assertTrue(SettingsCategory.NUVIO_RESHAPED in categories)
-            assertEquals(SettingsRailGroup.WATCH, SettingsCategory.NUVIO_RESHAPED.group)
+            assertTrue(SettingsCategory.NUVIO_CS in categories)
+            assertEquals(SettingsRailGroup.WATCH, SettingsCategory.NUVIO_CS.group)
         }
     }
 

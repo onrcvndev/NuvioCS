@@ -425,7 +425,7 @@ internal class LocalPreviewTrack(
             PreviewDecodeGate.tryRun {
                 runCatching {
                     decoder.decode(MediaFormatUtil.createMediaFormatFromFormat(format).apply {
-                        format.codecs?.let { setString("reshaped-codecs", it) }
+                        format.codecs?.let { setString("nuviocs-codecs", it) }
                     }, bytes, 0, bytes.size, timeUs)
                 }.getOrElse {
                     if (it is OutOfMemoryError) throw it

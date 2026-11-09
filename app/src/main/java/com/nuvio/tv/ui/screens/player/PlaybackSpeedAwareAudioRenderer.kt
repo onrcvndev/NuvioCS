@@ -25,7 +25,7 @@ internal class PlaybackSpeedAwareAudioRenderer(
     eventHandler: Handler?,
     eventListener: AudioRendererEventListener?,
     private val playbackSpeedAwareAudioSink: PlaybackSpeedAwareAudioSink,
-    // Nuvio RS: the sink the renderer writes to when the speed-aware sink is wrapped (AutoSync audio tap).
+    // Nuvio CS: the sink the renderer writes to when the speed-aware sink is wrapped (AutoSync audio tap).
     outputSink: AudioSink = playbackSpeedAwareAudioSink
 ) : MediaCodecAudioRenderer(
     rendererContext,

@@ -14,9 +14,9 @@
     <string name="autosync_toast_synced">Auto Sync • Untertitel synchronisiert</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Zu einem besser passenden Untertitel gewechselt</string>
     <string name="autosync_toast_in_sync">Auto Sync • Untertitel bereits synchron</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Synchronisierung fehlgeschlagen • Untertitel-Timing unverändert</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Keine eingebetteten Untertitel zum Vergleich • Untertitel-Timing unverändert</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Untertitelformat nicht unterstützt • Untertitel-Timing unverändert</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Synchronisierung fehlgeschlagen • Untertitel-Timing unverändert</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Keine eingebetteten Untertitel zum Vergleich • Untertitel-Timing unverändert</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Untertitelformat nicht unterstützt • Untertitel-Timing unverändert</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Keine Übereinstimmung gefunden • stattdessen Synchronisierung mit dem Ton…</string>
     <string name="autosync_label_synced">Automatisch synchronisiert</string>
 </resources>

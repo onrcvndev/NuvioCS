@@ -162,7 +162,7 @@ private fun settingsSectionSpec(category: SettingsCategory): SettingsSectionSpec
     SettingsCategory.LAYOUT -> SettingsSectionSpec(category, stringResource(R.string.settings_layout), Icons.Default.GridView, destination = SettingsSectionDestination.Inline)
     SettingsCategory.CONTENT_DISCOVERY -> SettingsSectionSpec(category, stringResource(R.string.settings_content_discovery), Icons.Default.Explore, destination = SettingsSectionDestination.Inline)
     SettingsCategory.PLAYBACK -> SettingsSectionSpec(category, stringResource(R.string.settings_playback), Icons.Rounded.PlayArrow, destination = SettingsSectionDestination.Inline)
-    SettingsCategory.NUVIO_RESHAPED -> SettingsSectionSpec(category, stringResource(R.string.settings_nuvio_reshaped), Icons.Default.AutoAwesome, destination = SettingsSectionDestination.Inline) // Nuvio RS hook
+    SettingsCategory.NUVIO_CS -> SettingsSectionSpec(category, stringResource(R.string.settings_nuviocs), Icons.Default.AutoAwesome, destination = SettingsSectionDestination.Inline)
     SettingsCategory.INTEGRATION -> SettingsSectionSpec(category, stringResource(R.string.settings_integration), Icons.Default.Link, destination = SettingsSectionDestination.Inline)
     SettingsCategory.TRACKING -> SettingsSectionSpec(category, stringResource(R.string.settings_tracking_title), Icons.Default.Sync, destination = SettingsSectionDestination.Inline)
     SettingsCategory.ADVANCED -> SettingsSectionSpec(category, stringResource(R.string.settings_advanced), Icons.Default.Build, destination = SettingsSectionDestination.Inline)
@@ -237,7 +237,7 @@ fun SettingsScreen(
             SettingsCategory.INTEGRATION to FocusRequester(),
             SettingsCategory.TRACKING to FocusRequester(),
             SettingsCategory.PLAYBACK to FocusRequester(),
-            SettingsCategory.NUVIO_RESHAPED to FocusRequester(), // Nuvio RS hook
+            SettingsCategory.NUVIO_CS to FocusRequester(),
             SettingsCategory.ADVANCED to FocusRequester(),
             SettingsCategory.ABOUT to FocusRequester(),
             SettingsCategory.ACCOUNT to FocusRequester()
@@ -975,8 +975,8 @@ private fun SettingsDetailPane(
                 null
             }
         )
-        SettingsCategory.NUVIO_RESHAPED -> NuvioReshapedSettingsContent( // Nuvio RS hook
-            initialFocusRequester = if (allowDetailAutofocus) contentFocusRequesters[SettingsCategory.NUVIO_RESHAPED] else null
+        SettingsCategory.NUVIO_CS -> NuvioCsSettingsContent(
+            initialFocusRequester = if (allowDetailAutofocus) contentFocusRequesters[SettingsCategory.NUVIO_CS] else null
         )
         SettingsCategory.TRACKING -> TrackingSettingsContent(
             initialFocusRequester = if (allowDetailAutofocus) {

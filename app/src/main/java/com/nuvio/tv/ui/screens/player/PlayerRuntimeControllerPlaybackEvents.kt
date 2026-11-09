@@ -230,7 +230,7 @@ internal fun PlayerRuntimeController.skipInterval(interval: SkipInterval): Boole
 
 internal fun PlayerRuntimeController.applyAudioAmplification(db: Int) {
     val clampedDb = db.coerceIn(AUDIO_AMPLIFICATION_MIN_DB, AUDIO_AMPLIFICATION_MAX_DB)
-    val isAudioAmplificationAvailable = isUsingMpvEngine() || (_exoPlayer != null && !isAudioOutputBypassing) // Nuvio RS hook: no gain on a bitstream
+    val isAudioAmplificationAvailable = isUsingMpvEngine() || (_exoPlayer != null && !isAudioOutputBypassing) // no gain on a bitstream
     val wasActive = gainAudioProcessor.isGainEnabled()
     gainAudioProcessor.setGainDb(if (isAudioAmplificationAvailable) clampedDb else AUDIO_AMPLIFICATION_MIN_DB)
     val isActiveNow = gainAudioProcessor.isGainEnabled()
@@ -280,7 +280,7 @@ internal fun PlayerRuntimeController.updateAudioControlAvailability(
     selectedAudioIndex: Int = _uiState.value.selectedAudioTrackIndex
 ) {
     val selectedTrack = audioTracks.getOrNull(selectedAudioIndex)
-    val isAudioAmplificationAvailable = isUsingMpvEngine() || (_exoPlayer != null && !isAudioOutputBypassing) // Nuvio RS hook: no gain on a bitstream
+    val isAudioAmplificationAvailable = isUsingMpvEngine() || (_exoPlayer != null && !isAudioOutputBypassing) // no gain on a bitstream
     val isCenterMixAvailable =
         ffmpegAudioRenderer?.isCenterMixActive() == true && (selectedTrack?.channelCount ?: 0) > 2
     val clampedDb = _uiState.value.audioAmplificationDb
@@ -478,7 +478,7 @@ internal fun PlayerRuntimeController.startProgressUpdates() {
                     playerReportsLive = player.isCurrentMediaItemLive,
                     isPlaying = player.isPlaying
                 )
-                // Nuvio RS hook: read-ahead's connection; a live stream only arrives at its own bitrate, so it says nothing about the network.
+                // read-ahead's connection; a live stream only arrives at its own bitrate, so it says nothing about the network.
                 PlaybackThroughput.onExoTick(context, currentStreamUrl, !player.isCurrentMediaItemLive && playerDuration != androidx.media3.common.C.TIME_UNSET && player.isLoading)
                 playbackAnalyticsDiagnostics.recordProgressSnapshot(
                     player = player,

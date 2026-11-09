@@ -1,9 +1,7 @@
 # Builds the full flavor as Nuvio CS and publishes a GitHub release that the in-app updater reads.
 #
 # Version, application id and update repository come from fork.properties: bump versionName and
-# versionCode there, push, then run this workflow from the branch. Upstream's own workflows were
-# removed from this fork; if an upstream sync brings one back (or changes a removed one), drop it
-# again with `git rm` while resolving the merge.
+# versionCode there, push, then run this workflow from the branch.
 #
 # Required secrets:
 #   NUVIO_CS_LOCAL_PROPERTIES_BASE64  base64 of a local.properties with TMDB_API_KEY and any other

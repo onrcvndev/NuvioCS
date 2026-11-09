@@ -1,6 +1,6 @@
 package com.nuvio.tv.ui.screens.player.seekpreview.engine
 
-import com.nuvio.tv.reshaped.debuglog.DebugLogServer
+import com.nuvio.tv.nuviocs.debuglog.DebugLogServer
 import fi.iki.elonen.NanoHTTPD
 import java.io.File
 import java.lang.reflect.Proxy

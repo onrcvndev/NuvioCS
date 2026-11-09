@@ -14,11 +14,11 @@ internal data class FrameColour(
     val range: Int,
     val maxCll: Int,
     val masteringMaxNits: Int,
-    /** FFmpeg attached Dolby Vision metadata with an IPT signal (profile 5): must be reshaped. */
+    /** FFmpeg attached Dolby Vision metadata with an IPT signal (profile 5): must be nuviocs. */
     val doviIpt: Boolean = false,
 )
 
-/** DOVI_IPT: Dolby Vision profile 5, reshaped natively from the frame's DV metadata into PQ BT.2020. */
+/** DOVI_IPT: Dolby Vision profile 5, nuviocs natively from the frame's DV metadata into PQ BT.2020. */
 internal enum class ThumbTransfer(val nativeCode: Int) { SDR(0), PQ(1), HLG(2), DOVI_IPT(3) }
 
 internal data class ColourDecision(
@@ -62,7 +62,7 @@ internal object ColourClassifier {
 
         // Dolby Vision profile 5 (or any IPT-signalled RPU): the decoder's metadata decides.
         if (frame.doviIpt) {
-            return ColourDecision(ThumbTransfer.DOVI_IPT, true, true, peak, "dolby-vision IPT (p${dv?.profile ?: 5}) reshaped")
+            return ColourDecision(ThumbTransfer.DOVI_IPT, true, true, peak, "dolby-vision IPT (p${dv?.profile ?: 5}) nuviocs")
         }
         // Dolby Vision: the base layer's signalling is defined by the profile / compatibility id.
         if (dv != null) {

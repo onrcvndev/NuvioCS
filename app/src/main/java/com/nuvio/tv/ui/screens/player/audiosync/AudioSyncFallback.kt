@@ -304,7 +304,7 @@ internal class AudioSyncFallback private constructor(
             else -> Unit
         }
         val message = status.message(appContext) ?: return
-        showAutoSyncMessage(appContext, status.bubbleKind(), message) // Nuvio RS hook: AutoSync bubble
+        showAutoSyncMessage(appContext, status.bubbleKind(), message) // AutoSync bubble
     }
 
     companion object {

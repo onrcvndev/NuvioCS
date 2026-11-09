@@ -7,8 +7,8 @@
     <string name="autosync_toast_synced">Auto Sync • Titulky synchronizované</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Prepnuté na lepšie zodpovedajúce titulky</string>
     <string name="autosync_toast_in_sync">Auto Sync • Titulky už sú synchronizované</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Synchronizácia zlyhala • časovanie titulkov nezmenené</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Žiadne vložené titulky na porovnanie • časovanie titulkov nezmenené</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Formát titulkov nie je podporovaný • časovanie titulkov nezmenené</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Synchronizácia zlyhala • časovanie titulkov nezmenené</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Žiadne vložené titulky na porovnanie • časovanie titulkov nezmenené</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Formát titulkov nie je podporovaný • časovanie titulkov nezmenené</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Zhoda sa nenašla • synchronizácia podľa zvuku…</string>
 </resources>

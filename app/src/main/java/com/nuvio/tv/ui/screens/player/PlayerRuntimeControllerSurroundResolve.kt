@@ -6,8 +6,8 @@ import com.nuvio.tv.core.player.DeniedTranscodePlanner
 import com.nuvio.tv.core.player.SurroundFormatResolver
 import com.nuvio.tv.data.local.AudioOutputChannels
 import com.nuvio.tv.data.local.DeniedCodecHandling
-import com.nuvio.tv.data.local.ReshapedFormatSettings
-import com.nuvio.tv.data.local.ReshapedFormatSettingsStore
+import com.nuvio.tv.data.local.NuvioCsFormatSettings
+import com.nuvio.tv.data.local.NuvioCsFormatSettingsStore
 import com.nuvio.tv.data.local.SurroundChannelTarget
 import com.nuvio.tv.data.local.SurroundFormatMode
 import kotlinx.coroutines.delay
@@ -31,7 +31,7 @@ internal data class SurroundResolveResult(
 
 internal fun resolveSurroundForRoute(
     context: Context,
-    playerSettings: ReshapedFormatSettings,
+    playerSettings: NuvioCsFormatSettings,
     inputs: SurroundResolveInputs
 ): SurroundResolveResult {
     val currentRouteKey = inputs.routeKey
@@ -95,7 +95,7 @@ internal suspend fun PlayerRuntimeController.applySurroundResolutionInPlace(reas
     if (_exoPlayer == null || isUsingMpvEngine()) return
     val inputs = surroundResolveInputs ?: return
     if (inputs.isBluetooth || currentAudioOutputRoute?.isBluetooth == true) return
-    val settings = ReshapedFormatSettingsStore.current(context)
+    val settings = NuvioCsFormatSettingsStore.current(context)
     val player = _exoPlayer
     var surround = readSurroundInPlace(inputs, settings)
     if (settings.surroundFormatMode != SurroundFormatMode.MANUAL &&
@@ -194,7 +194,7 @@ private fun PlayerRuntimeController.keepFormatsForPlayingBitstream(
 
 private fun PlayerRuntimeController.readSurroundInPlace(
     inputs: SurroundResolveInputs,
-    settings: ReshapedFormatSettings
+    settings: NuvioCsFormatSettings
 ): SurroundResolveResult = resolveSurroundForRoute(
     context,
     settings,
@@ -205,7 +205,7 @@ private fun PlayerRuntimeController.commitSurroundResolution(
     reason: String,
     surround: SurroundResolveResult,
     inputs: SurroundResolveInputs,
-    settings: ReshapedFormatSettings
+    settings: NuvioCsFormatSettings
 ) {
     val routeKey = currentAudioOutputRoute?.key ?: inputs.routeKey
     val policy = surround.resolution.policy

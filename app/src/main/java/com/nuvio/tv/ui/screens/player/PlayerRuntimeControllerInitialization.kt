@@ -175,7 +175,7 @@ internal fun PlayerRuntimeController.initializePlayer(
         return
     }
     sourceRecoveryPickerError = null
-    beginFormatsPlayback(url, headers) // Nuvio RS hook: Arc formats
+    beginFormatsPlayback(url, headers) // Arc formats
     mpvMediaLoadPrepared = false
     val afrPreflightToken = afrPreflightGate.token()
 
@@ -236,7 +236,7 @@ internal fun PlayerRuntimeController.initializePlayer(
             if (rememberAudioDelayPerDeviceEnabled) {
                 applyStoredAudioDelayForCurrentRouteIfEnabled()
             }
-            onFormatsRouteDetected() // Nuvio RS hook: Arc formats
+            onFormatsRouteDetected() // Arc formats
             // Re-apply on every (re)initialization without dropping the user's tweak on the current stream.
             applyEffectiveAudioDelay()
             cachedDecoderPriority = playerSettings.decoderPriority
@@ -703,7 +703,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                         streamMime.lowercase().contains("m3u8")
                     )
                     Log.d("NuvioTrackSelector", "selectAllTracks run: streamMime=$streamMime, isHls=$isHls")
-                    applyFormatsTrackRules(mappedTrackInfo, rendererFormatSupports) // Nuvio RS hook: Arc formats
+                    applyFormatsTrackRules(mappedTrackInfo, rendererFormatSupports) // Arc formats
                     if (isHls) {
                         for (rendererIndex in 0 until mappedTrackInfo.rendererCount) {
                             if (mappedTrackInfo.getRendererType(rendererIndex) == C.TRACK_TYPE_VIDEO) {
@@ -791,7 +791,7 @@ internal fun PlayerRuntimeController.initializePlayer(
             }.apply {
                 setParameters(buildUponParameters().setAllowInvalidateSelectionsOnRendererCapabilitiesChange(true))
                 isTunnelingActiveForCurrentPlayback = tunnelingActive &&
-                    !safeAudioModeEnabled && !tunnelingDisabledStreamUrls.contains(url) // Nuvio RS hook: Arc formats
+                    !safeAudioModeEnabled && !tunnelingDisabledStreamUrls.contains(url) // Arc formats
                 if (isTunnelingActiveForCurrentPlayback) {
                     setParameters(buildUponParameters().setTunnelingEnabled(true))
                 } else if (safeAudioModeEnabled) {
@@ -849,7 +849,7 @@ internal fun PlayerRuntimeController.initializePlayer(
 
             // ── Extractors & DV Hook ──
             val extractorsFactory = DefaultExtractorsFactory()
-                .setTsExtractorFlags(DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS or com.nuvio.tv.reshaped.livetv.LiveTvTsFlags.extraFor(url)) // Nuvio RS hook: Live TV starts on any I-frame
+                .setTsExtractorFlags(DefaultTsPayloadReaderFactory.FLAG_ENABLE_HDMV_DTS_AUDIO_STREAMS)
                 .setTsExtractorTimestampSearchBytes(1500 * TsExtractor.TS_PACKET_SIZE)
 
             // Manual Convert-to-DV8.1 uses mode 2; if a prior attempt at this stream
@@ -901,7 +901,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                 playerSettings.decoderPriority != 0
             // Prefer FFmpeg/extension audio decoder on BT so multi-channel TrueHD/DTS always
             // decode to stereo PCM even when the platform MediaCodec path is flaky.
-            val formatsEnabled = formatSettings().enabled // Nuvio RS hook: Arc formats
+            val formatsEnabled = formatSettings().enabled // Arc formats
             val effectiveDecoderPriority = if (
                 hasTriedAudioPcmFallback ||
                 (isForcePassthroughActive && !formatsEnabled) ||
@@ -931,7 +931,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                 )
             }
 
-            // Nuvio RS hook: Arc formats (Auto surround, learned refusals, IEC engine for TrueHD / DTS-HD).
+            // Arc formats (Auto surround, learned refusals, IEC engine for TrueHD / DTS-HD).
             val formatsPlan = planFormatsAudio(
                 url = url,
                 isBluetooth = isBluetoothAudioOutput,
@@ -1027,7 +1027,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                         ),
                         stripDvRpu = stripDvRpuEnabled,
                         stripHdr10PlusSei = stripHdr10PlusSei,
-                        injectHdr10Sei = formatSettings().injectHdr10MetadataOnStrip // Nuvio RS: Arc HDR10 metadata on strip
+                        injectHdr10Sei = formatSettings().injectHdr10MetadataOnStrip // Nuvio CS: Arc HDR10 metadata on strip
                     ).let { autoSyncExtractorsFactory(it, url, headers) } // AutoSync hook
 
             setLoadingStatus(
@@ -1123,7 +1123,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                     .setUsage(C.USAGE_MEDIA)
                     .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
                     .build()
-                // Nuvio RS hook: Arc formats. On Android TV focus ducking applies a software volume, which a
+                // Arc formats. On Android TV focus ducking applies a software volume, which a
                 // compressed bitstream cannot take, so ExoPlayer would drop TrueHD / DTS-HD / Atmos to PCM.
                 val handleAudioFocus = !formatsActiveForCurrentPlayback || !context.packageManager
                     .hasSystemFeature(android.content.pm.PackageManager.FEATURE_LEANBACK)
@@ -1334,7 +1334,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                                     userPausedManually = userPausedManually,
                                     startPaused = startPaused,
                                     isTunneledPlayback = isTunneledPlayback &&
-                                        (!formatsActiveForCurrentPlayback || this@apply.isTunnelingEnabled), // Nuvio RS hook
+                                        (!formatsActiveForCurrentPlayback || this@apply.isTunnelingEnabled),
                                 )
                             )
                             shouldEnforceAutoplayOnFirstReady =
@@ -1414,10 +1414,10 @@ internal fun PlayerRuntimeController.initializePlayer(
                                 trackSelectionParameters = trackSelectionParameters.buildUpon().build()
                             }
                             maybeScheduleFirstFrameWatchdog()
-                            maybeScheduleTunnelAvSyncWatchdog() // Nuvio RS hook: Arc formats
+                            maybeScheduleTunnelAvSyncWatchdog() // Arc formats
                         } else if (playbackState == Player.STATE_ENDED || playbackState == Player.STATE_IDLE) {
                             cancelFirstFrameWatchdog()
-                            cancelTunnelAvSyncWatchdog() // Nuvio RS hook: Arc formats
+                            cancelTunnelAvSyncWatchdog() // Arc formats
                         }
 
                         if (playbackState == Player.STATE_ENDED) {
@@ -1449,7 +1449,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                     }
 
                     override fun onIsPlayingChanged(isPlaying: Boolean) {
-                        playbackSpeedAwareAudioSink?.setPlaybackActive(isPlaying) // Nuvio RS hook: Arc formats
+                        playbackSpeedAwareAudioSink?.setPlaybackActive(isPlaying) // Arc formats
                         logScrobbleDiagnostic(
                             "exo_is_playing_changed",
                             "isPlaying=$isPlaying playbackState=$playbackState playWhenReady=$playWhenReady " +
@@ -1532,9 +1532,8 @@ internal fun PlayerRuntimeController.initializePlayer(
 
                     override fun onPlayerError(error: PlaybackException) {
                         if (isReleasingPlayer && error.errorCode == PlaybackException.ERROR_CODE_TIMEOUT) return
-                        if (!isInBackground && com.nuvio.tv.reshaped.livetv.LiveEdgeRecovery.tryRejoin(error, _exoPlayer)) return // Nuvio RS hook: rejoin the live edge
                         cancelFirstFrameWatchdog()
-                        cancelTunnelAvSyncWatchdog() // Nuvio RS hook: Arc formats
+                        cancelTunnelAvSyncWatchdog() // Arc formats
                         val status = error.findInvalidResponseCodeException()?.responseCode
                         val detailedError = error.toDisplayMessage(context)
                         if (status in listOf(401, 403, 404, 410) && autoSourceRecovery?.failDefinitively(detailedError) == true) return
@@ -1566,7 +1565,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                             return
                         }
 
-                        if (handleFormatsPlayerError(error, this@apply)) return // Nuvio RS hook: Arc formats
+                        if (handleFormatsPlayerError(error, this@apply)) return // Arc formats
 
                         // Error handlers: DV codec failures, audio decoder issues, codec state errors.
                         if (error.isDolbyVisionDecoderFailure() && !isMapDv7ToHevcActiveForCurrentPlayback) {
@@ -1603,7 +1602,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                         // audio fallbacks (safe-audio/audio-disabled) on it — they rebuild
                         // the player with the same broken conversion and fail identically.
                         if (error.errorCode == PlaybackException.ERROR_CODE_FAILED_RUNTIME_CHECK &&
-                            !(formatsActiveForCurrentPlayback && error.isFormatsAudioOutputRuntimeFailure()) && // Nuvio RS hook: Arc formats
+                            !(formatsActiveForCurrentPlayback && error.isFormatsAudioOutputRuntimeFailure()) && // Arc formats
                             (isExperimentalDv7ToDv81ActiveForCurrentPlayback ||
                                 isManualDv81Mode2ActiveForCurrentPlayback) &&
                             !isMapDv7ToHevcActiveForCurrentPlayback
@@ -1663,7 +1662,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                         }
 
                         if (error.isStuckPlayingNoProgress()) {
-                            if (tryTunnelOffForStuckPlayback(this@apply)) return // Nuvio RS hook: Arc formats
+                            if (tryTunnelOffForStuckPlayback(this@apply)) return // Arc formats
                             if (tryNextAudioFallbackStep(currentPosition)) return
                         }
 
@@ -1767,7 +1766,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                 })
 
                 addAnalyticsListener(object : AnalyticsListener {
-                    // Nuvio RS hook: Arc formats (audio path row, learned refusals, recovery gate)
+                    // Arc formats (audio path row, learned refusals, recovery gate)
                     override fun onAudioTrackInitialized(
                         eventTime: AnalyticsListener.EventTime,
                         audioTrackConfig: androidx.media3.exoplayer.audio.AudioSink.AudioTrackConfig
@@ -1801,7 +1800,7 @@ internal fun PlayerRuntimeController.initializePlayer(
 
                     override fun onIsPlayingChanged(eventTime: AnalyticsListener.EventTime, isPlaying: Boolean) {
                         playbackAnalyticsDiagnostics.onIsPlayingChanged(eventTime, isPlaying)
-                        onFormatsIsPlayingChanged(this@apply, isPlaying) // Nuvio RS hook: Arc formats
+                        onFormatsIsPlayingChanged(this@apply, isPlaying) // Arc formats
                     }
 
                     override fun onIsLoadingChanged(eventTime: AnalyticsListener.EventTime, isLoading: Boolean) {
@@ -1834,7 +1833,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                         initializationDurationMs: Long
                     ) {
                         currentDiagnostics = currentDiagnostics.copy(dv81DecoderName = decoderName)
-                        formatsVideoDecoderName = decoderName // Nuvio RS hook: Arc formats (tunnel frame reporters)
+                        formatsVideoDecoderName = decoderName // Arc formats (tunnel frame reporters)
                         playbackAnalyticsDiagnostics.onVideoDecoderInitialized(
                             eventTime = eventTime,
                             decoderName = decoderName,
@@ -1934,7 +1933,7 @@ internal fun PlayerRuntimeController.initializePlayer(
                             bufferSizeMs = bufferSizeMs,
                             elapsedSinceLastFeedMs = elapsedSinceLastFeedMs
                         )
-                        PlayerAudioUnderrunCounter.record() // Nuvio RS hook: Arc formats
+                        PlayerAudioUnderrunCounter.record() // Arc formats
                     }
 
                     override fun onBandwidthEstimate(
@@ -2183,7 +2182,7 @@ internal fun PlayerRuntimeController.buildStartupSubtitleConfigurations(startupS
 
 internal fun PlayerRuntimeController.resetLoadingOverlayForNewStream() {
     cancelFirstFrameWatchdog()
-    cancelTunnelAvSyncWatchdog() // Nuvio RS hook: Arc formats
+    cancelTunnelAvSyncWatchdog() // Arc formats
     cancelStallWatchdog()
     val preparingMessage = context.getString(R.string.player_loading_preparing)
     resetLoadingDiagnostics(
@@ -2247,7 +2246,7 @@ private const val SEEK_SOURCE_SETTLE_MS = 800L
 
 private class SubtitleOffsetRenderersFactory(
     context: Context,
-    // Nuvio RS hook: Arc formats. Inactive plan = NuvioTV's own audio path.
+    // Arc formats. Inactive plan = NuvioTV's own audio path.
     private val formatsPlan: FormatsAudioPlan,
     private val onIecFailed: (() -> Unit)? = null,
     private val onAudioDiagnosticEvent: ((String) -> Unit)? = null,
@@ -2324,7 +2323,7 @@ private class SubtitleOffsetRenderersFactory(
         }
     }
 
-    // Nuvio RS hook: the speed-aware sink, kept because AutoSync's audio tap wraps what buildAudioSink returns.
+    // the speed-aware sink, kept because AutoSync's audio tap wraps what buildAudioSink returns.
     private var builtSpeedAwareSink: PlaybackSpeedAwareAudioSink? = null
 
     override fun buildAudioSink(
@@ -2536,7 +2535,7 @@ internal fun FfmpegAudioRenderer.applyDownmixSettings(
     downmixNormalizationEnabled: Boolean,
     lfeMixLevel: Float,
     forceOpticalPassthrough: Boolean,
-    deniedTranscodeMimes: Set<String> = emptySet() // Nuvio RS hook: Arc formats (per-format AC-3 transcode)
+    deniedTranscodeMimes: Set<String> = emptySet() // Arc formats (per-format AC-3 transcode)
 ) {
     setForceOpticalPassthrough(forceOpticalPassthrough)
     setDeniedTranscodeMimes(deniedTranscodeMimes)

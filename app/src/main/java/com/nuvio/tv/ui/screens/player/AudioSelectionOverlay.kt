@@ -64,8 +64,8 @@ import com.nuvio.tv.R
 import com.nuvio.tv.data.local.NightMode
 import com.nuvio.tv.ui.screens.detail.requestFocusAfterFrames
 import com.nuvio.tv.ui.util.languageCodeToName
-import com.nuvio.tv.ui.reshaped.volumeboost.VolumeBoostBar
-import com.nuvio.tv.ui.reshaped.volumeboost.volumeBoostPercent
+import com.nuvio.tv.ui.nuviocs.volumeboost.VolumeBoostBar
+import com.nuvio.tv.ui.nuviocs.volumeboost.volumeBoostPercent
 import java.util.Locale
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -559,7 +559,7 @@ private fun AudioControlsContent(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             AdjustmentSection(
-                title = stringResource(R.string.volume_boost_label), // Nuvio RS: volume boost
+                title = stringResource(R.string.volume_boost_label), // Nuvio CS: volume boost
                 valueText = stringResource(
                     R.string.volume_boost_value,
                     volumeBoostPercent(currentDb, AUDIO_AMPLIFICATION_MAX_DB),
@@ -599,7 +599,7 @@ private fun AudioControlsContent(
                     }
                 }
             )
-            VolumeBoostBar( // Nuvio RS: volume boost
+            VolumeBoostBar( // Nuvio CS: volume boost
                 gainDb = currentDb,
                 maxDb = AUDIO_AMPLIFICATION_MAX_DB,
                 enabled = isAmplificationAvailable

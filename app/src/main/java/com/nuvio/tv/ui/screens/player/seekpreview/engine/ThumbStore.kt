@@ -30,7 +30,7 @@ internal class ThumbStore private constructor(
 ) {
     companion object {
         private const val TAG = "ThumbStore"
-        const val DIR = "reshaped_seek_thumbs_v1"
+        const val DIR = "nuviocs_seek_thumbs_v1"
         /** Older stores (smaller pictures), deleted at the next housekeeping. */
         private val LEGACY_DIRS = listOf("seek_thumbs", "seek_thumbs_v3")
         private const val MAGIC = 0x4E545333            // "NTS3"

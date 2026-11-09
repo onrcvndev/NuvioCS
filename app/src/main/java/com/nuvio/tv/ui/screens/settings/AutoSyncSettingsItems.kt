@@ -18,7 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
-import com.nuvio.tv.ui.reshaped.debuglog.DebugLogQrDialog
+import com.nuvio.tv.ui.nuviocs.debuglog.DebugLogQrDialog
 import com.nuvio.tv.ui.screens.player.autosync.AutoSyncPreferences
 import com.nuvio.tv.ui.screens.player.audiosync.AudioSyncFallback
 import com.nuvio.tv.ui.screens.player.audiosync.AudioSyncSettings
@@ -96,8 +96,8 @@ internal fun LazyListScope.autoSyncSettingsItems(
         var showQr by remember { mutableStateOf(false) }
         NavigationSettingsItem(
             icon = Icons.Default.QrCode2,
-            title = stringResource(R.string.reshaped_debug_logs_to_phone_title),
-            subtitle = stringResource(R.string.reshaped_debug_logs_to_phone_description),
+            title = stringResource(R.string.nuviocs_debug_logs_to_phone_title),
+            subtitle = stringResource(R.string.nuviocs_debug_logs_to_phone_description),
             onClick = { showQr = true },
         )
         if (showQr) DebugLogQrDialog(onDismiss = { showQr = false })

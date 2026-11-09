@@ -14,9 +14,9 @@
     <string name="autosync_toast_synced">Auto Sync • Subtitrări sincronizate</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • S-a trecut la o subtitrare care se potrivește mai bine</string>
     <string name="autosync_toast_in_sync">Auto Sync • Subtitrările sunt deja sincronizate</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Sincronizare eșuată • sincronizarea subtitrării nu a fost modificată</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Nu există subtitrări încorporate pentru comparație • sincronizarea subtitrării nu a fost modificată</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Formatul subtitrării nu este acceptat • sincronizarea subtitrării nu a fost modificată</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Sincronizare eșuată • sincronizarea subtitrării nu a fost modificată</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Nu există subtitrări încorporate pentru comparație • sincronizarea subtitrării nu a fost modificată</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Formatul subtitrării nu este acceptat • sincronizarea subtitrării nu a fost modificată</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Nicio potrivire găsită • se sincronizează după sunet…</string>
     <string name="autosync_label_synced">Sincronizat automat</string>
 </resources>

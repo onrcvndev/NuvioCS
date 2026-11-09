@@ -18,8 +18,8 @@ import androidx.media3.exoplayer.trackselection.MappingTrackSelector
 import com.nuvio.tv.core.player.AudioPassthroughPolicy
 import com.nuvio.tv.data.local.AudioOutputChannels
 import com.nuvio.tv.data.local.InternalPlayerEngine
-import com.nuvio.tv.data.local.ReshapedFormatSettings
-import com.nuvio.tv.data.local.ReshapedFormatSettingsStore
+import com.nuvio.tv.data.local.NuvioCsFormatSettings
+import com.nuvio.tv.data.local.NuvioCsFormatSettingsStore
 import com.nuvio.tv.ui.screens.player.iec.LiveDirectAudioPlayback
 import com.nuvio.tv.ui.screens.player.iec.PlatformIecAudioTrackFactory
 import kotlinx.coroutines.CoroutineStart
@@ -30,12 +30,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 
 /*
- * Nuvio RS: Nuvio Arc's sound format handling, wired into the player through small hooks.
+ * Nuvio CS: Nuvio Arc's sound format handling, wired into the player through small hooks.
  *
  * TrueHD and DTS-HD go out through Arc's own IEC61937 engine (MAT packing for TrueHD), Auto surround
  * reads what the HDMI chain takes and decodes the rest, receiver refusals are learned per output, and
  * a few recovery steps keep sound playing when an output refuses a format. Everything here runs only
- * with Settings > Nuvio Reshaped > Sound and picture formats on; off, the player is NuvioTV's own.
+ * with Settings > Nuvio CS > Sound and picture formats on; off, the player is NuvioTV's own.
  */
 
 internal const val TUNNEL_AV_SYNC_CHECK_MS = 1_000L
@@ -44,8 +44,8 @@ internal const val TUNNEL_AV_SYNC_NO_FRAME_MS = 8_000L
 
 private const val MAX_FORMATS_RECOVERIES_PER_STREAM = 5
 
-internal fun PlayerRuntimeController.formatSettings(): ReshapedFormatSettings =
-    ReshapedFormatSettingsStore.current(context)
+internal fun PlayerRuntimeController.formatSettings(): NuvioCsFormatSettings =
+    NuvioCsFormatSettingsStore.current(context)
 
 /** Reads an Android system property (debug.* switches settable with adb, no root); null if unavailable. */
 internal fun formatsSystemProperty(name: String): String? = runCatching {
@@ -73,18 +73,18 @@ internal fun PlayerRuntimeController.beginFormatsPlayback(url: String, headers: 
 internal fun PlayerRuntimeController.onFormatsRouteDetected() {
     val settings = formatSettings()
     if (!settings.enabled) return
-    AudioRejectionReverifier.ledger.restoreEvidence(ReshapedFormatSettingsStore.audioRefusalEvidence(context))
-    val expired = ReshapedFormatSettingsStore.expireTunnelDeadAudioClasses(context)
+    AudioRejectionReverifier.ledger.restoreEvidence(NuvioCsFormatSettingsStore.audioRefusalEvidence(context))
+    val expired = NuvioCsFormatSettingsStore.expireTunnelDeadAudioClasses(context)
     if (expired.isNotEmpty()) {
         PlayerTunnelAvSyncPolicy.deadAudioClasses.removeAll(expired)
         Log.i(PlayerRuntimeController.TAG, "TUNNEL_AV_SYNC: saved dead-clock memo expired for $expired")
     }
-    PlayerTunnelAvSyncPolicy.frameReportDecoders.addAll(ReshapedFormatSettingsStore.tunnelFrameReportDecoders(context))
+    PlayerTunnelAvSyncPolicy.frameReportDecoders.addAll(NuvioCsFormatSettingsStore.tunnelFrameReportDecoders(context))
     rearmOutputChecksForNewPlayer()
     currentAudioOutputRoute?.let { route ->
         if (!route.isBluetooth && _exoPlayer == null) {
             AudioRejectionReverifier.start(route.key, settings.audioRejectionsConfirmed) { entry ->
-                ReshapedFormatSettingsStore.clearAudioRejection(context, entry)
+                NuvioCsFormatSettingsStore.clearAudioRejection(context, entry)
             }
         }
     }
@@ -140,7 +140,7 @@ internal fun PlayerRuntimeController.planFormatsAudio(
     }
     val currentRouteKey = currentAudioOutputRoute?.key
     // A distinct token is consumed once, including across process restarts.
-    if (ReshapedFormatSettingsStore.consumeAudioRejectionReset(
+    if (NuvioCsFormatSettingsStore.consumeAudioRejectionReset(
             context, formatsSystemProperty("debug.nuvio.clear_audio_rejections").orEmpty()
         )
     ) {
@@ -730,7 +730,7 @@ internal fun PlayerRuntimeController.scheduleOwnedPlaybackRecovery(
         }
         if (runCatching { AudioOutputRouteDetector.detect(context)?.key }.getOrNull() != route) {
             _uiState.update {
-                it.copy(error = context.getString(com.nuvio.tv.R.string.reshaped_formats_output_changed), showLoadingOverlay = false)
+                it.copy(error = context.getString(com.nuvio.tv.R.string.nuviocs_formats_output_changed), showLoadingOverlay = false)
             }
             return@launch
         }
@@ -874,7 +874,7 @@ private fun PlayerRuntimeController.readBitstreamOutput(format: Format?): Bitstr
 }
 
 internal fun PlayerRuntimeController.saveAudioRefusalEvidence() {
-    ReshapedFormatSettingsStore.saveAudioRefusalEvidence(context, AudioRejectionReverifier.ledger.evidenceSnapshot())
+    NuvioCsFormatSettingsStore.saveAudioRefusalEvidence(context, AudioRejectionReverifier.ledger.evidenceSnapshot())
 }
 
 internal fun PlayerRuntimeController.recordStashedAudioRejection(openedEncoding: Int) {
@@ -891,7 +891,7 @@ internal fun PlayerRuntimeController.recordStashedAudioRejection(openedEncoding:
                 "AC-3 or E-AC-3 among them: the output is down, not the format" +
                 if (commit.forget.isEmpty()) "" else "; forgetting ${commit.forget.joinToString(",")}"
         )
-        for (stale in commit.forget) ReshapedFormatSettingsStore.clearAudioRejection(context, stale)
+        for (stale in commit.forget) NuvioCsFormatSettingsStore.clearAudioRejection(context, stale)
         return
     }
     Log.i(
@@ -899,7 +899,7 @@ internal fun PlayerRuntimeController.recordStashedAudioRejection(openedEncoding:
         "AUDIO_REJECTION: ${group.name} refused at open on $routeKey, fallback opened " +
             "encoding=$openedEncoding; recording denial"
     )
-    ReshapedFormatSettingsStore.recordAudioRejection(context, routeKey, group.name)
+    NuvioCsFormatSettingsStore.recordAudioRejection(context, routeKey, group.name)
 }
 
 /**
@@ -985,7 +985,7 @@ internal fun PlayerRuntimeController.maybeScheduleTunnelAvSyncWatchdog() {
                 livePlayer.isTunnelingEnabled && PlayerTunnelAvSyncPolicy.frameReportDecoders.add(frameReportKey)
             ) {
                 Log.i(PlayerRuntimeController.TAG, "TUNNEL_AV_SYNC: tunnelled frames reported by $frameReportKey")
-                ReshapedFormatSettingsStore.addTunnelFrameReportDecoder(context, frameReportKey)
+                NuvioCsFormatSettingsStore.addTunnelFrameReportDecoder(context, frameReportKey)
             }
             val result = PlayerTunnelAvSyncPolicy.evaluate(
                 PlayerTunnelAvSyncPolicy.Input(
@@ -1104,7 +1104,7 @@ private fun PlayerRuntimeController.persistDeadClockMemoWhenRebuildPlays(
             }
             lastPositionMs = positionMs
             if (PlayerTunnelAvSyncPolicy.memoConfirmed(playedMs)) {
-                ReshapedFormatSettingsStore.recordTunnelDeadAudioClass(context, audioClass, signature)
+                NuvioCsFormatSettingsStore.recordTunnelDeadAudioClass(context, audioClass, signature)
                 Log.i(
                     PlayerRuntimeController.TAG,
                     "TUNNEL_AV_SYNC: dead-clock memo persisted class=$audioClass (untunnelled rebuild playing)"

@@ -48,9 +48,9 @@ import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.nuvio.tv.R
-import com.nuvio.tv.reshaped.phoneentry.PhoneEntryPage
+import com.nuvio.tv.nuviocs.phoneentry.PhoneEntryPage
 import com.nuvio.tv.ui.components.NuvioDialog
-import com.nuvio.tv.ui.reshaped.phoneentry.PhoneEntryQr
+import com.nuvio.tv.ui.nuviocs.phoneentry.PhoneEntryQr
 import com.nuvio.tv.ui.screens.player.seekpreview.SeekrKeyPreferences
 import com.nuvio.tv.ui.theme.NuvioTheme
 import kotlinx.coroutines.launch

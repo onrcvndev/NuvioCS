@@ -5,7 +5,6 @@ import com.nuvio.tv.core.player.recovery.AutoSourceRecoveryPlan
 import com.nuvio.tv.core.player.recovery.AutoSourceRecoverySettings
 import com.nuvio.tv.core.player.recovery.prepareAutoSource
 
-import com.nuvio.tv.ui.reshaped.livetv.keepPlayerForLiveTvZap // Nuvio RS hook
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -245,7 +244,7 @@ internal fun PlayerRuntimeController.loadSourceStreams(forceRefresh: Boolean) {
             updateSourceChipsForFetchStart(type, vid, installedAddons)
         }
 
-        // Nuvio RS: one connection snapshot per load, taken once the duration is known.
+        // Nuvio CS: one connection snapshot per load, taken once the duration is known.
         var connectionFit: StreamConnectionFit? = null
         var connectionFitCaptured = false
 
@@ -1015,7 +1014,7 @@ internal fun PlayerRuntimeController.switchToSourceStream(
     )
 
     resetLoadingOverlayForNewStream()
-    if (!keepPlayerForLiveTvZap(url)) releasePlayer(flushPlaybackState = false) // Nuvio RS hook: Live TV zaps keep the player
+    releasePlayer(flushPlaybackState = false)
 
     applySelectedStreamState(
         stream = stream,
@@ -1717,7 +1716,7 @@ internal fun PlayerRuntimeController.switchToEpisodeStream(
         persistSelectedStreamForReuse(stream = stream, url = playbackUrl, headers = playbackHeaders)
     }
     persistedTrackPreference = null
-    losslessAudioDefaultAppliedForStream = false // Nuvio RS hook: Arc formats
+    losslessAudioDefaultAppliedForStream = false // Arc formats
     persistedAudioPreferenceSeenForStream = false
     subtitleDisabledByPersistedPreference = false
     subtitleAddonRestoredByPersistedPreference = false
@@ -1843,7 +1842,7 @@ private fun PlayerRuntimeController.switchToEpisodeStreamCommon(
     currentFilename = stream.behaviorHints?.filename
 
     persistedTrackPreference = null
-    losslessAudioDefaultAppliedForStream = false // Nuvio RS hook: Arc formats
+    losslessAudioDefaultAppliedForStream = false // Arc formats
     persistedAudioPreferenceSeenForStream = false
     subtitleDisabledByPersistedPreference = false
     subtitleAddonRestoredByPersistedPreference = false

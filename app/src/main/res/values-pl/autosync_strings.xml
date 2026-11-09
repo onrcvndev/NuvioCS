@@ -7,8 +7,8 @@
     <string name="autosync_toast_synced">Auto Sync • Napisy zsynchronizowane</string>
     <string name="autosync_toast_synced_replaced">Auto Sync • Przełączono na lepiej dopasowane napisy</string>
     <string name="autosync_toast_in_sync">Auto Sync • Napisy są już zsynchronizowane</string>
-    <string name="reshaped_autosync_toast_failed">Auto Sync • Synchronizacja nie powiodła się • czas napisów bez zmian</string>
-    <string name="reshaped_autosync_toast_failed_no_reference">Auto Sync • Brak osadzonych napisów do porównania • czas napisów bez zmian</string>
-    <string name="reshaped_autosync_toast_failed_unsupported">Auto Sync • Nieobsługiwany format napisów • czas napisów bez zmian</string>
+    <string name="nuviocs_autosync_toast_failed">Auto Sync • Synchronizacja nie powiodła się • czas napisów bez zmian</string>
+    <string name="nuviocs_autosync_toast_failed_no_reference">Auto Sync • Brak osadzonych napisów do porównania • czas napisów bez zmian</string>
+    <string name="nuviocs_autosync_toast_failed_unsupported">Auto Sync • Nieobsługiwany format napisów • czas napisów bez zmian</string>
     <string name="autosync_toast_failed_audio_fallback">Auto Sync • Nie znaleziono dopasowania • synchronizacja z dźwiękiem…</string>
 </resources>

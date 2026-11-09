@@ -244,7 +244,6 @@ fun PlayerScreen(
     val context = LocalContext.current
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val containerFocusRequester = remember { FocusRequester() }
-    val liveTvPlayer = com.nuvio.tv.ui.reshaped.livetv.rememberLiveTvPlayer(viewModel.controller, containerFocusRequester) // Nuvio RS hook: Live TV
     val playPauseFocusRequester = remember { FocusRequester() }
     val progressBarFocusRequester = remember { FocusRequester() }
     val episodesFocusRequester = remember { FocusRequester() }
@@ -680,7 +679,6 @@ fun PlayerScreen(
             .focusRequester(containerFocusRequester)
             .focusable(enabled = uiState.error == null)
             .onPreviewKeyEvent { keyEvent ->
-                if (liveTvPlayer.onPreviewKey(keyEvent.nativeKeyEvent, uiState)) return@onPreviewKeyEvent true // Nuvio RS hook: Live TV
                 // Consume the confirm KEY_UP that opened the subtitle timing dialog before
                 // the newly focused "Sync" button can treat it as a second click. Preview
                 // is required: after open, focus moves into the dialog so onKeyEvent on
@@ -856,8 +854,7 @@ fun PlayerScreen(
                         shouldConfirmNextEpisodeOnEnd ||
                         uiState.postPlayMode is PostPlayMode.StillWatching ||
                         postPlayRecommendationState.isVisible ||
-                        uiState.error != null ||
-                        liveTvPlayer.panelOpen // Nuvio RS hook: Live TV channel list
+                        uiState.error != null
                 if (panelOrDialogOpen) return@onKeyEvent false
 
                 if (keyEvent.nativeKeyEvent.action == KeyEvent.ACTION_UP) {
@@ -1412,7 +1409,7 @@ fun PlayerScreen(
         }
 
         SubtitleSyncStatusPanel(NuvioTheme.spacing.xl) // AutoSync hook: audio sync fallback status
-        AutoSyncBubbleToastHost(controlsVisible = uiState.showControls) // Nuvio RS hook: AutoSync bubble
+        AutoSyncBubbleToastHost(controlsVisible = uiState.showControls) // AutoSync bubble
 
         // Torrent stats overlay (top-right corner)
         TorrentOverlay(
@@ -2166,8 +2163,6 @@ fun PlayerScreen(
             )
         }
 
-        com.nuvio.tv.ui.reshaped.livetv.LiveTvPlayerOverlay(liveTvPlayer, uiState) // Nuvio RS hook: Live TV
-
         if (uiState.showSpeedDialog) {
             SpeedSelectionDialog(
                 currentSpeed = uiState.playbackSpeed,
@@ -2423,8 +2418,8 @@ private fun ExoPlayerSurface(
     LaunchedEffect(playerView, subtitleStyle, subtitleLiftPx) {
         playerView.applySubtitleStyleIfNeeded(subtitleStyle, subtitleLiftPx)
     }
-    // Nuvio RS hook: custom subtitle font, re-applied when it finishes loading or changes
-    LaunchedEffect(playerView) { com.nuvio.tv.reshaped.subtitlefont.SubtitleFontStore.font.collect { playerView.applySubtitleStyleIfNeeded(latestSubtitleStyle, latestSubtitleLiftPx, force = true) } }
+    // custom subtitle font, re-applied when it finishes loading or changes
+    LaunchedEffect(playerView) { com.nuvio.tv.nuviocs.subtitlefont.SubtitleFontStore.font.collect { playerView.applySubtitleStyleIfNeeded(latestSubtitleStyle, latestSubtitleLiftPx, force = true) } }
 }
 
 private fun PlayerView.enableComposeSurfaceSyncWorkaroundIfAvailable() {
@@ -2600,8 +2595,8 @@ private fun PlayerView.applySubtitleStyleIfNeeded(
         setFixedTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, scaledFontSize)
         setApplyEmbeddedFontSizes(false)
 
-        // Nuvio RS hook: custom subtitle font (null = default system font)
-        val typeface = com.nuvio.tv.reshaped.subtitlefont.SubtitleFontStore.exoTypeface(context, subtitleStyle.bold)
+        // custom subtitle font (null = default system font)
+        val typeface = com.nuvio.tv.nuviocs.subtitlefont.SubtitleFontStore.exoTypeface(context, subtitleStyle.bold)
             ?: if (subtitleStyle.bold) {
             android.graphics.Typeface.DEFAULT_BOLD
         } else {

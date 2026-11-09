@@ -87,13 +87,13 @@ val devProperties = Properties().apply {
 }
 
 val enableDoviNative = parseBooleanProperty(
-    resolveProperty(devProperties, localProperties, "DOVI_NATIVE_ENABLED", "true") // Nuvio RS: Arc builds the DV bridge with libdovi by default
+    resolveProperty(devProperties, localProperties, "DOVI_NATIVE_ENABLED", "true") // Nuvio CS: Arc builds the DV bridge with libdovi by default
 )
 val doviExtractorHookReady = parseBooleanProperty(
-    resolveProperty(devProperties, localProperties, "DOVI_EXTRACTOR_HOOK_READY", "true") // Nuvio RS: Arc builds the DV bridge with libdovi by default
+    resolveProperty(devProperties, localProperties, "DOVI_EXTRACTOR_HOOK_READY", "true") // Nuvio CS: Arc builds the DV bridge with libdovi by default
 )
 val doviEnableRealLink = parseBooleanProperty(
-    resolveProperty(devProperties, localProperties, "DOVI_ENABLE_REAL_LINK", "true") // Nuvio RS: Arc builds the DV bridge with libdovi by default
+    resolveProperty(devProperties, localProperties, "DOVI_ENABLE_REAL_LINK", "true") // Nuvio CS: Arc builds the DV bridge with libdovi by default
 )
 val doviStaticLibPath = resolveProperty(devProperties, localProperties, "DOVI_LIBDOVI_STATIC_LIB")
 val doviIncludeDirPath = resolveProperty(devProperties, localProperties, "DOVI_LIBDOVI_INCLUDE_DIR")
@@ -375,8 +375,8 @@ androidComponents {
         val isPlaystore = variant.productFlavors.any { it.second == "playstore" }
         variant.applicationId.set(if (isPlaystore) "com.nuvio.appdebug" else "com.nuviodebug.com")
     }
-    // Nuvio CS: the full flavor ships under the fork's own identity from fork.properties. Registered
-    // after the debug block above so it overrides that application id.
+    // The full flavor ships as Nuvio CS with the identity in fork.properties. Registered after the
+    // debug block above so it overrides that application id.
     onVariants(selector().withFlavor("distribution" to "full")) { variant ->
         val forkApplicationId = forkProperty("applicationId")
         variant.applicationId.set(if (variant.debuggable) "$forkApplicationId.debug" else forkApplicationId)
@@ -643,7 +643,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
-apply(from = "reshaped.gradle") // Nuvio RS hook: fork build settings
+apply(from = "nuviocs.gradle") // fork build settings
 
 // FFmpeg 6.0 fallback ABI pin. Updating this AAR requires reviewing the preview backend headers too.
 val verifyPreviewFfmpegAbi by tasks.registering {
