@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Nuvio CS: Turkish translations for upstream strings that have no values-tr entry yet.
+  Kept in its own file so upstream syncs do not conflict; if upstream later translates one of
+  these keys the build reports a duplicate resource, then delete that key here.
+-->
+<resources>
+
+    <!-- audio_sync_strings.xml -->
+    <string name="player_audio_sync_model_downloading">Daha hızlı altyazı eşitleme için konuşma tanıma modeli indiriliyor (%1$s MB)…</string>
+    <string name="player_audio_sync_model_needs_wifi">Daha hızlı altyazı eşitleme için %1$s MB\'lık konuşma modelini indirmek üzere bir kez Wi-Fi\'ye bağlanın</string>
+    <string name="player_audio_sync_live_only">Bu cihazda %1$s ses için ileriye bakma yok, canlı sesten eşitleniyor (daha yavaş)</string>
+    <string name="player_audio_sync_withdrawn">Altyazı eşitlemesi doğrulanamadı, orijinal zamanlama geri yüklendi</string>
+    <string name="player_audio_sync_estimated">Altyazılar sese eşitleniyor (%1$s), ince ayar yapılıyor…</string>
+    <string name="player_audio_sync_synced">Altyazı eşitlemesi doğrulandı (%1$s)</string>
+    <string name="player_audio_sync_synced_rate">Altyazı eşitlemesi doğrulandı (%1$s, kare hızı düzeltildi)</string>
+    <string name="player_audio_sync_adjusted">Altyazı zamanlaması değişti, yeniden eşitlendi (%1$s)</string>
+    <string name="audio_sync_show_statistics_title">AudioSync istatistiklerini göster</string>
+    <string name="audio_sync_show_statistics_subtitle">Oynatıcının sol üst köşesinde, ses eşitlemenin ne duyduğunu ve neden eşitlendiğini ya da henüz eşitlenmediğini gösteren canlı bir panel açar.</string>
+
+    <!-- auto_source_recovery_strings.xml -->
+    <string name="settings_auto_source_recovery">Otomatik olarak başka kaynak dene</string>
+    <string name="settings_auto_source_recovery_description">Oynatma başlamazsa, İlk Kaynak veya Regex otomatik oynatma tercihinize göre sıradaki kaynağı dener.</string>
+    <string name="settings_auto_source_recovery_unavailable">Bu seçeneği kullanmak için Oynatma ayarlarında dahili oynatıcıyla İlk Kaynak veya Regex otomatik oynatmayı seçin.</string>
+    <string name="player_auto_source_recovery_exhausted">Otomatik kaynaklar başlatılamadı. Başka bir kaynak seçin.</string>
+    <string name="player_auto_source_recovery_switching">Başka bir kaynak deneniyor: %1$s</string>
+    <string name="player_auto_source_recovery_timeout">Önceki kaynağın başlaması çok uzun sürdü.</string>
+    <string name="player_auto_source_recovery_resolve_failed">Önceki kaynak açılamadı.</string>
+
+    <!-- autosync_bubble_strings.xml -->
+    <string name="settings_autosync_bubble_toast">Baloncuk bildirimleri</string>
+    <string name="settings_autosync_bubble_toast_description">AutoSync ilerlemesini ve sonuçlarını düz bildirimler yerine oynatıcının altında küçük, animasyonlu buzlu bir baloncukta gösterir</string>
+    <string name="settings_autosync_failures_only">Yalnızca eşitleme hatalarını göster</string>
+    <string name="settings_autosync_failures_only_description">AutoSync ve AudioSync ilerleme ve başarı bildirimlerini gizler. Yalnızca eşitleme başarısız olduğunda bildirim gösterir.</string>
+    <string name="autosync_bubble_label">AutoSync</string>
+
+    <!-- connection_speed_strings.xml -->
+    <string name="settings_stream_connection_fit_title">Akışları bağlantıya uydur</string>
+    <string name="settings_stream_connection_fit_description">Eklentinizin akış sırasını korur, ancak bağlantınız için muhtemelen fazla ağır olan akışları sona taşır. Hız, kendi oynatmalarınızdan öğrenilir.</string>
+    <string name="settings_stream_connection_fit_learning">Bu ağdaki hızınız oynatmalardan öğreniliyor. O zamana kadar akış sırası değişmez.</string>
+    <string name="settings_stream_connection_fit_measured">Bu ağda yaklaşık %1$d Mbps. Akış sıranız korunur; bu hız için muhtemelen fazla ağır olan akışlar sona gider.</string>
+
+    <!-- live_tv_strings.xml -->
+    <string name="live_tv_title">Canlı TV</string>
+    <string name="settings_live_tv_title">Canlı TV</string>
+    <string name="settings_live_tv_description">M3U, Xtream ve Stalker kanal listeleri için menüde Canlı TV\'yi göster</string>
+    <string name="live_tv_all_channels">Tüm kanallar</string>
+    <string name="live_tv_favorites">Favoriler</string>
+    <string name="live_tv_channel_count">%1$d kanal</string>
+    <string name="live_tv_search">Kanal ara</string>
+    <string name="live_tv_refresh">Yenile</string>
+    <string name="live_tv_sources">Kaynaklar</string>
+    <string name="live_tv_categories">Kategoriler</string>
+    <string name="live_tv_edit_categories">Kategorileri düzenle</string>
+    <string name="live_tv_source_error">%1$s: %2$s</string>
+    <string name="live_tv_continue">İzlemeye devam et</string>
+    <string name="live_tv_favorite_add">Favorilere ekle</string>
+    <string name="live_tv_favorite_remove">Favorilerden çıkar</string>
+    <string name="live_tv_favorite_hint">Favori eklemek veya çıkarmak için OK\'a basılı tutun</string>
+    <string name="live_tv_loading">Kanallar yükleniyor…</string>
+    <string name="live_tv_guide_loading">Rehber yükleniyor…</string>
+    <string name="live_tv_no_channels_found">Eşleşen kanal yok.</string>
+    <string name="live_tv_no_favorites">Bir kanalı favorilerinize eklemek için üzerinde OK\'a basılı tutun.</string>
+    <string name="live_tv_empty_title">Kanallarınızı ekleyin</string>
+    <string name="live_tv_empty_description">Bir M3U oynatma listesi, Xtream girişi veya Stalker portalı bağlayın. En hızlı yol telefonunuzdan kurmaktır.</string>
+    <string name="live_tv_add_source">Kanal ekle</string>
+    <string name="live_tv_now">Şimdi</string>
+    <string name="live_tv_minutes_left">%1$d dk kaldı</string>
+    <string name="live_tv_hours_minutes_left">%1$d sa %2$d dk kaldı</string>
+    <string name="live_tv_sources_title">Kanal kaynakları</string>
+    <string name="live_tv_sources_description">Tüm kaynaklardaki kanallar tek bir listede birlikte gösterilir.</string>
+    <string name="live_tv_source_add_title">Kaynak ekle</string>
+    <string name="live_tv_add_source_button">Kaynak ekle</string>
+    <string name="live_tv_source_summary">%1$s · %2$d kanal</string>
+    <string name="live_tv_remove_confirm">Kaldırmak için tekrar basın</string>
+    <string name="live_tv_back">Geri</string>
+    <string name="live_tv_source_description">Telefonunuzdan kurmak için kodu tarayın veya buraya girin.</string>
+    <string name="live_tv_source_m3u">M3U</string>
+    <string name="live_tv_source_xtream">Xtream</string>
+    <string name="live_tv_source_stalker">Stalker</string>
+    <string name="live_tv_m3u_hint">Oynatma listesi bağlantısı (https://…)</string>
+    <string name="live_tv_xtream_server_hint">Sunucu URL\'si</string>
+    <string name="live_tv_username_hint">Kullanıcı adı</string>
+    <string name="live_tv_password_hint">Şifre</string>
+    <string name="live_tv_optional_username_hint">Kullanıcı adı (isteğe bağlı)</string>
+    <string name="live_tv_optional_password_hint">Şifre (isteğe bağlı)</string>
+    <string name="live_tv_stalker_portal_hint">Portal URL\'si</string>
+    <string name="live_tv_stalker_mac_hint">MAC adresi, örn. 00:1A:79:12:34:56</string>
+    <string name="live_tv_load">Kanalları yükle</string>
+    <string name="live_tv_remove_source">Kaynağı kaldır</string>
+    <string name="live_tv_move_source_up">Yukarı taşı</string>
+    <string name="live_tv_move_source_down">Aşağı taşı</string>
+    <string name="live_tv_edit_source">Düzenle</string>
+    <string name="live_tv_source_edit_title">Kaynağı düzenle</string>
+    <string name="live_tv_source_edit_description">Adını değiştirin ya da adresini, girişini veya rehberini güncelleyin. Gizli kanallar ve favoriler korunur.</string>
+    <string name="live_tv_save_source">Kaydet</string>
+    <string name="live_tv_imported_file">İçe aktarılan dosya: %1$s</string>
+    <string name="live_tv_source_name_hint">Ad (%1$s)</string>
+    <string name="live_tv_epg_hint">Rehber bağlantısı (XMLTV, isteğe bağlı)</string>
+    <string name="live_tv_user_agent_hint">User agent (isteğe bağlı)</string>
+    <string name="live_tv_source_guide_none">rehber yok</string>
+    <string name="live_tv_source_guide_loading">rehber yükleniyor</string>
+    <string name="live_tv_source_guide_failed">rehber yüklenemedi</string>
+    <string name="live_tv_source_guide_loaded">%1$d kanal için rehber</string>
+    <string name="live_tv_source_guide_retrying">%1$d kanal için rehber, güncelleme başarısız, yeniden deneniyor</string>
+    <string name="live_tv_error_guide_url">Rehber bağlantısı http:// veya https:// ile başlamalıdır</string>
+    <string name="live_tv_close">Kapat</string>
+    <string name="live_tv_phone_instruction">Bağlantı yapıştırmak, giriş bilgisi yazmak veya M3U dosyası göndermek için telefonunuzla tarayın.</string>
+    <string name="live_tv_categories_title">Kategoriler</string>
+    <string name="live_tv_categories_description">OK bir kategoriyi gösterir veya gizler, ▶ adını değiştirir ya da kanallarını seçer. Taşımak için OK\'a basılı tutun, ardından ▲▼ ile kaydırıp OK ile bırakın. Gizlenenler listeden, aramadan ve kanal geçişinden çıkar; favoriler her zaman kalır.</string>
+    <string name="live_tv_category_channels_description">Kategorinin adını değiştirmek için yukarıya yazın. OK bir kanalı gösterir veya gizler. Gizlenenler listeden, aramadan ve kanal geçişinden çıkar; favoriler her zaman kalır.</string>
+    <string name="live_tv_category_rename_hint">%1$s adını değiştir</string>
+    <string name="live_tv_catchup">Geriye dönük izleme</string>
+    <string name="live_tv_catchup_failed">Bu program tekrar oynatılamıyor</string>
+    <string name="live_tv_categories_sort">A–Z</string>
+    <string name="live_tv_categories_provider_order">Sağlayıcı sırası</string>
+    <string name="live_tv_uncategorised">Kategorisiz</string>
+    <string name="live_tv_categories_shown">%2$d kategoriden %1$d tanesi gösteriliyor</string>
+    <string name="live_tv_categories_show_all">Tümünü göster</string>
+    <string name="live_tv_categories_hide_all">Tümünü gizle</string>
+    <string name="live_tv_categories_none">Kanallar yüklendiğinde kategoriler burada görünür.</string>
+    <string name="live_tv_done">Bitti</string>
+    <string name="live_tv_live_badge">CANLI</string>
+    <string name="settings_live_tv_previews_title">Kanal önizlemeleri</string>
+    <string name="settings_live_tv_previews_description">Canlı TV listesinde bulunduğunuz kanalın küçük bir görüntüsünü oynatır</string>
+    <string name="settings_live_tv_preview_sound_title">Önizleme sesi</string>
+    <string name="settings_live_tv_preview_sound_description">Kanalı önizlemede duyun. Ses yavaşça açılır ve listeden çıktığınızda durur</string>
+    <string name="live_tv_player_channels">Kanallar</string>
+    <string name="live_tv_player_categories_hint">◀ Kategoriler  ·  ▶ Rehber</string>
+    <string name="live_tv_player_programmes_hint">◀ Kanallar  ·  OK İzle</string>
+    <string name="live_tv_player_programmes_days_hint">◀ Kanallar  ·  ▶ Günler  ·  OK İzle</string>
+    <string name="live_tv_day_today">Bugün</string>
+    <string name="live_tv_day_yesterday">Dün</string>
+    <string name="live_tv_day_tomorrow">Yarın</string>
+    <string name="live_tv_player_hint">▲▼ Kanal değiştir  ·  ◀ Kanal listesi  ·  OK Bilgi</string>
+    <string name="live_tv_info_hint">OK Kontroller  ·  ◀ Kanal listesi  ·  ▲▼ Kanal değiştir</string>
+    <string name="live_tv_info_hint_start_over">OK Kontroller  ·  OK basılı tut Baştan başlat  ·  ◀ Kanal listesi  ·  ▲▼ Kanal değiştir</string>
+    <string name="live_tv_info_hint_rewind">OK Kontroller  ·  ◀ Geri sar  ·  ▲▼ Kanal değiştir</string>
+    <string name="live_tv_info_hint_rewind_start_over">OK Kontroller  ·  ◀ Geri sar  ·  OK basılı tut Baştan başlat  ·  ▲▼ Kanal değiştir</string>
+    <string name="live_tv_info_now">Şimdi</string>
+    <string name="live_tv_info_next">Sonraki · %1$s</string>
+    <string name="live_tv_info_no_guide">Bu kanal için rehber yok</string>
+    <string name="live_tv_guide">Rehber</string>
+    <string name="live_tv_preview_mute">Önizlemenin sesini kapat</string>
+    <string name="live_tv_preview_unmute">Önizlemenin sesini aç</string>
+    <string name="live_tv_guide_ended">Bitti</string>
+    <string name="live_tv_guide_none">Rehber yok</string>
+    <string name="live_tv_guide_hint">OK İzle  ·  CH+/CH− Sayfa  ·  Geri Kapat</string>
+    <string name="live_tv_error_invalid_url">Geçerli bir HTTP veya HTTPS oynatma listesi bağlantısı girin.</string>
+    <string name="live_tv_error_no_channels">Bu oynatma listesinde oynatılabilir kanal bulunamadı.</string>
+    <string name="live_tv_error_load_failed">Oynatma listesi yüklenemedi.</string>
+    <string name="live_tv_error_file_empty">M3U dosyası boş.</string>
+    <string name="live_tv_error_file_no_channels">Bu M3U dosyasında oynatılabilir kanal bulunamadı.</string>
+    <string name="live_tv_error_stalker_required">Portal URL\'si ve MAC adresi gereklidir.</string>
+    <string name="live_tv_error_stalker_invalid_url">Geçerli bir HTTP veya HTTPS portal bağlantısı girin.</string>
+    <string name="live_tv_error_stalker_no_channels">Bu portalda oynatılabilir kanal bulunamadı.</string>
+    <string name="live_tv_error_stalker_failed">Stalker portalı yüklenemedi.</string>
+    <string name="live_tv_error_stalker_token">Portal oturum başlatmadı. Portal URL\'sini ve MAC adresini kontrol edin.</string>
+    <string name="live_tv_error_stalker_incomplete">Bazı kanallar portaldan yüklenemedi. Tekrar denemek için yenileyin.</string>
+    <string name="live_tv_error_xtream_required">Sunucu URL\'si, kullanıcı adı ve şifre gereklidir.</string>
+    <string name="live_tv_error_xtream_invalid_url">Geçerli bir HTTP veya HTTPS Xtream sunucu URL\'si girin.</string>
+    <string name="live_tv_error_xtream_no_channels">Bu Xtream girişi için oynatılabilir kanal bulunamadı.</string>
+    <string name="live_tv_error_xtream_failed">Xtream sağlayıcısı yüklenemedi.</string>
+    <string name="live_tv_web_title">TV\'nizde Canlı TV</string>
+    <string name="live_tv_web_subtitle">Sağlayıcınızın kanalları nasıl verdiğini seçin. Gönderdiğiniz anda TV kanalları yükler.</string>
+    <string name="live_tv_web_m3u_link">Oynatma listesi bağlantısı</string>
+    <string name="live_tv_web_m3u_file">Oynatma listesi dosyası</string>
+    <string name="live_tv_web_send">TV\'ye gönder</string>
+    <string name="live_tv_web_sending">Gönderiliyor…</string>
+    <string name="live_tv_web_sent">Gönderildi. TV kanallarınızı yüklüyor.</string>
+    <string name="live_tv_web_choose_file">Önce bir .m3u dosyası seçin.</string>
+    <string name="live_tv_web_too_large">Bu dosya çok büyük.</string>
+    <string name="live_tv_web_failed">TV bunu kabul edemedi. Alanları kontrol edin.</string>
+    <string name="live_tv_web_connection_error">TV\'ye ulaşılamadı. Hâlâ Canlı TV kurulum ekranında mı?</string>
+    <string name="live_tv_settings">Canlı TV ayarları</string>
+    <string name="live_tv_cancel">İptal</string>
+    <string name="live_tv_menu_sources">Kaynaklar</string>
+    <string name="live_tv_menu_sources_description">M3U, Xtream ve Stalker girişlerinizi ekleyin, düzenleyin veya kaldırın</string>
+    <string name="live_tv_menu_categories">Kategoriler</string>
+    <string name="live_tv_menu_categories_description">Kategorileri ve kanalları gösterin, gizleyin, yeniden adlandırın ve sıralayın</string>
+    <string name="live_tv_menu_playlists_description">Kendi kanal listelerinizi oluşturun, yeniden adlandırın, sıralayın veya silin</string>
+    <string name="live_tv_menu_reload">Kanalları ve rehberi yeniden yükle</string>
+    <string name="live_tv_menu_reload_description">Tüm kaynakları ve TV rehberlerini yeniden indir</string>
+    <string name="live_tv_menu_preview_sound">Önizleme sesi</string>
+    <string name="live_tv_menu_on">Açık</string>
+    <string name="live_tv_menu_show_favorites">Favorileri göster</string>
+    <string name="live_tv_menu_show_all">Tüm kanalları göster</string>
+    <string name="live_tv_menu_prefer_hls">Tekrarlarda HLS\'yi tercih et</string>
+    <string name="live_tv_menu_prefer_hls_on">Açık: tekrarlar panelden önce HLS ister, böylece ilerleme çubuğu ve sarma olur. Olmazsa TS\'ye döner.</string>
+    <string name="live_tv_menu_prefer_hls_off">Kapalı: tekrarlar kanalın kendi biçiminde oynatılır</string>
+    <string name="live_tv_menu_guide_refresh">Rehber yenileme</string>
+    <string name="live_tv_menu_guide_refresh_value">Her %1$d saatte bir. Kanal listeleri Canlı TV her açıldığında yenilenir.</string>
+    <string name="live_tv_menu_off">Kapalı</string>
+    <string name="live_tv_my_playlists">Listelerim</string>
+    <string name="live_tv_playlists_description">Herhangi bir kaynaktan kanallar içeren kendi listeleriniz. OK bir listeyi açar.</string>
+    <string name="live_tv_playlists_none">Henüz listeniz yok. Oluşturmak için Yeni liste\'yi seçin.</string>
+    <string name="live_tv_playlist_description">OK bir kanalı çıkarır. Bir kanalı ▲▼ ile taşımak için üzerinde OK\'a basılı tutun, ardından OK ile bırakın.</string>
+    <string name="live_tv_playlist_empty">Bu liste boş. Buraya eklemek için herhangi bir kategoriye gidip bir kanalın üzerinde OK\'a basılı tutun.</string>
+    <string name="live_tv_playlist_new">Yeni liste</string>
+    <string name="live_tv_playlist_new_description">Bir ad verin. Ardından eklemek için rehberdeki herhangi bir kanalın üzerinde OK\'a basılı tutun.</string>
+    <string name="live_tv_playlist_new_with_channel">Bir ad verin. İlk kanalı %1$s olacak.</string>
+    <string name="live_tv_playlist_name_hint">Liste adı</string>
+    <string name="live_tv_playlist_create">Oluştur</string>
+    <string name="live_tv_playlist_delete">Listeyi sil</string>
+    <string name="live_tv_playlist_delete_confirm">Silmek için tekrar basın</string>
+    <string name="live_tv_playlist_unavailable">Kanal şu an kaynaklarınızda yok</string>
+    <string name="live_tv_picking_keys">OK kanal işaretler  ·  ◀ listeyi seçer  ·  Geri durdurur</string>
+    <string name="live_tv_choose_playlist">Listeyi seçin</string>
+    <string name="live_tv_remove_from_list">%1$s listesinden çıkar</string>
+    <string name="live_tv_choose_playlist_hint">İşaretli kanallar bu listeye eklenir. Hepsi zaten listedeyse çıkarılır.</string>
+    <string name="live_tv_moving_keys">▲▼ kanalı taşır  ·  OK bırakır</string>
+    <plurals name="live_tv_picked">
+        <item quantity="one">%d kanal seçildi</item>
+        <item quantity="other">%d kanal seçildi</item>
+    </plurals>
+    <plurals name="live_tv_playlist_new_with_channels">
+        <item quantity="one">Bir ad verin. İçinde %d kanal olacak.</item>
+        <item quantity="other">Bir ad verin. İçinde %d kanal olacak.</item>
+    </plurals>
+
+    <!-- netflix_ui_strings.xml -->
+    <string name="settings_netflix_ui_title">Netflix tarzı Ana Sayfa</string>
+    <string name="settings_netflix_ui_description">Üstte büyük bir tanıtım alanı ve odaklanan başlığın genişleyip ayrıntılarını gösterdiği satırlar. Yalnızca görünüm değişir; satırlar, ayarlar ve işlemler aynı kalır.</string>
+    <string name="settings_pill_nav_forced_by_netflix_ui">Netflix tarzı Ana Sayfa açıkken her zaman açık.</string>
+    <string name="netflix_ui_view_details">Ayrıntıları Gör</string>
+
+    <!-- nuvio_reshaped_settings_strings.xml -->
+    <string name="reshaped_debug_logs_to_phone_title">Hata ayıklama günlüklerini telefona gönder</string>
+    <string name="reshaped_debug_logs_to_phone_description">AutoSync ve ses eşitleme günlüklerini telefonunuza indirmek için bir QR kodu gösterir</string>
+    <string name="reshaped_debug_logs_to_phone_instruction">Aynı ağdaki bir telefonla tarayın, ardından indirmek için bir günlüğe dokunun.</string>
+
+    <!-- pill_nav_strings.xml -->
+    <string name="settings_pill_nav_title">Hap menü</string>
+    <string name="settings_pill_nav_description">Ekranın üstünde kayan vurgulu, yüzen bir metin menüsü. Kenar çubuğunun yerini alır. Ulaşmak için Yukarı\'ya, menüye atlamak için Geri\'ye basın.</string>
+
+    <!-- ranked_regex_strings.xml -->
+    <string name="ranked_regex_title">Öncelikli regex kuralları</string>
+    <string name="ranked_regex_disabled">İsteğe bağlı · yukarıdaki tekli regex kullanılıyor</string>
+    <string name="ranked_regex_count">%1$d kural · eşleşen en yüksek öncelik kazanır</string>
+    <string name="ranked_regex_summary">Eşleşen en yüksek öncelik kazanır. Eşitlikte eklenti sırası korunur.</string>
+    <string name="ranked_regex_help">Öncelik 1 en iyisidir. Kurallar, uygun tüm kaynaklarda sırayla denenir; eşitlikte eklenti sırası korunur. Eşleşme yoksa manuel seçim açılır. Kurallar tanımlıyken tekli regex\'in yerini alır. Mevcut son bağlantı ve art arda izleme grubu yeniden kullanımı yine önceliklidir. Boş alanlar yok sayılır.</string>
+    <string name="ranked_regex_priority">Öncelik %1$d</string>
+    <string name="ranked_regex_invalid">Geçersiz regex veya 2048 karakterden uzun</string>
+    <string name="ranked_regex_placeholder">Örnek: (?s)^(?=.*2160p)(?=.*remux)</string>
+    <string name="ranked_regex_up">Yukarı taşı</string>
+    <string name="ranked_regex_down">Aşağı taşı</string>
+    <string name="ranked_regex_remove">Kaldır</string>
+    <string name="ranked_regex_add">Kural ekle (en fazla 20)</string>
+    <string name="ranked_regex_clear">Kuralları temizle</string>
+    <string name="ranked_regex_license_title">Java regex kütüphanesi</string>
+    <string name="ranked_regex_license_body">Florian Ingerl\'in OpenJDK\'dan türetilmiş Regex 1.1.11 kütüphanesi. Classpath istisnalı GPL v2. Sınırlı kaynak sıralaması için kullanılır.</string>
+    <string name="ranked_regex_preset_help">Hazır ayarlar yalnızca bu önceliği değiştirir. Hariç tutma hazır ayarları diğer öncelikleri filtrelemez. Kuralları düzenleyin veya yeniden sıralayın, ardından Kaydet\'e basın.</string>
+
+    <!-- reshaped_formats_strings.xml -->
+    <string name="reshaped_formats_output_changed">Kurtarma sırasında ses çıkışı değişti. Oynatmayı yeniden başlatın.</string>
+    <string name="reshaped_formats_header">Ses ve görüntü biçimleri</string>
+    <string name="reshaped_formats_header_description">Nuvio Arc\'ın TrueHD, DTS-HD, Atmos, surround ve Dolby Vision işleme ayarları. Yalnızca dahili oynatıcı.</string>
+    <string name="reshaped_formats_enabled">Arc biçim işleme</string>
+    <string name="reshaped_formats_enabled_sub">TrueHD ve DTS-HD için kayıpsız passthrough, ses sisteminize uygun surround ve alıcı bir biçimi reddettiğinde Arc kurtarması. Kapalıyken ses tam olarak Nuvio\'daki gibi çalınır.</string>
+    <string name="reshaped_formats_use_system_passthrough">Sistem passthrough</string>
+    <string name="reshaped_formats_use_system_passthrough_sub">TrueHD ve DTS-HD\'yi uygulamanın IEC yolu yerine Android üzerinden alıcınıza gönderir. Kayıpsız biçimler parazit, kayma veya sessizlik üretiyorsa bunu kullanın.</string>
+    <string name="reshaped_formats_surround_mode">Surround biçimi</string>
+    <string name="reshaped_formats_surround_mode_auto">Otomatik (önerilen)</string>
+    <string name="reshaped_formats_surround_mode_auto_desc">Ses sisteminizin çözebildiğini bildirdiği biçimleri doğrudan geçirir, kalanları uygulamada çözer.</string>
+    <string name="reshaped_formats_surround_mode_manual">Manuel</string>
+    <string name="reshaped_formats_surround_mode_manual_desc">Ses sisteminizin her biçimi çözüp çözemeyeceğini tek tek seçin. Otomatik bildirim yanlışsa bunu kullanın.</string>
+    <string name="reshaped_formats_tv_arc_soundbar">Ses TV üzerinden bir soundbar\'a gidiyor (ARC)</string>
+    <string name="reshaped_formats_tv_arc_soundbar_sub">Soundbar\'ın alamadığı biçimleri Dolby Digital 5.1\'e dönüştürür ve diğer çözülmüş sesi stereo gönderir. Dolby Digital ve Dolby Digital Plus dokunulmadan geçer.</string>
+    <string name="reshaped_formats_allow_ac3">Dolby Digital (AC-3) destekli alıcı</string>
+    <string name="reshaped_formats_allow_ac3_sub">Kapalıyken AC-3 uygulamada PCM\'ye çözülür. Yalnızca alıcınız veya TV\'niz AC-3 çözemiyorsa kapatın.</string>
+    <string name="reshaped_formats_allow_eac3">Dolby Digital Plus (E-AC-3) destekli alıcı</string>
+    <string name="reshaped_formats_allow_eac3_sub">DD+ ve DD+ Atmos\'u kapsar. Kapalıyken PCM\'ye çözülür. Yalnızca alıcınız Dolby Digital Plus çözemiyorsa kapatın.</string>
+    <string name="reshaped_formats_allow_truehd">Dolby TrueHD destekli alıcı</string>
+    <string name="reshaped_formats_allow_truehd_sub">TrueHD ve TrueHD Atmos\'u kapsar. Kapalıyken PCM\'ye çözülür ve Atmos kaybolur. Yalnızca alıcınız TrueHD çözemiyorsa kapatın.</string>
+    <string name="reshaped_formats_allow_dts">DTS destekli alıcı</string>
+    <string name="reshaped_formats_allow_dts_sub">Kapalıyken DTS PCM\'ye çözülür. Alıcınız veya TV\'niz DTS çözemiyorsa kapatın; bazı TV\'ler artık bu lisansa sahip değil.</string>
+    <string name="reshaped_formats_allow_dtshd">DTS-HD destekli alıcı</string>
+    <string name="reshaped_formats_allow_dtshd_sub">DTS-HD MA, HRA ve DTS:X\'i kapsar. Kapalıyken PCM\'ye çözülür ve DTS:X kaybolur. Alıcınız DTS\'yi işleyip DTS-HD\'yi işleyemiyorsa kapatın.</string>
+    <string name="reshaped_formats_transcode_denied">Kapatılan biçimleri AC-3\'e dönüştür</string>
+    <string name="reshaped_formats_transcode_denied_sub">Yukarıda kapatılan biçimleri PCM yerine Dolby Digital 5.1 olarak yeniden kodlar. 2 kanal PCM ile sınırlı alıcılar içindir; alıcınız çok kanallı PCM alabiliyorsa kapalı bırakın.</string>
+    <string name="reshaped_formats_channel_target">Çözme kanal hedefi</string>
+    <string name="reshaped_formats_channel_target_sub">Uygulamanın çözdüğü ses için kanal düzeni. Otomatik, ses sisteminizin bildirdiğini izler.</string>
+    <string name="reshaped_formats_channel_auto">Otomatik</string>
+    <string name="reshaped_formats_channel_2_0">2.0 Stereo</string>
+    <string name="reshaped_formats_channel_5_1">5.1</string>
+    <string name="reshaped_formats_channel_7_1">7.1</string>
+    <string name="reshaped_formats_device_only_note">Oynatma ayarlarında ses çözücünüz yalnızca cihaz olarak ayarlı, bu yüzden uygulama biçimleri çözemez veya dönüştüremez.</string>
+    <string name="reshaped_formats_reset_iec_probe">Kayıpsız passthrough\'u yeniden test et</string>
+    <string name="reshaped_formats_reset_iec_probe_sub">IEC 61937 çıkışını yeniden test eder. Alıcıyı veya girişi değiştirdikten sonra TrueHD ya da DTS-HD PCM\'ye düşüyorsa bunu kullanın.</string>
+    <string name="reshaped_formats_iec_probe_checking">Kayıpsız passthrough kontrol ediliyor</string>
+    <string name="reshaped_formats_iec_probe_available">Kayıpsız passthrough açıldı. TrueHD ve DTS-HD bu bağlantıda gönderilecek.</string>
+    <string name="reshaped_formats_iec_probe_unavailable">Bu bağlantıda kayıpsız passthrough kullanılamıyor. TrueHD ve DTS-HD bunun yerine cihazınızın varsayılanını kullanır.</string>
+    <string name="reshaped_formats_forget_rejections">Öğrenilen ses retlerini unut</string>
+    <string name="reshaped_formats_forget_rejections_sub">Alıcınızın açmayı reddettiği biçimler ona passthrough olarak gönderilmez. Bu, onların yeniden denenmesini sağlar.</string>
+    <string name="reshaped_formats_forget_rejections_none">Öğrenilen bir şey yok</string>
+    <string name="reshaped_formats_forget_rejections_done">Öğrenilen ses retleri temizlendi</string>
+    <string name="reshaped_formats_forget_tunnel_stalls">Tünel takılmalarını unut</string>
+    <string name="reshaped_formats_forget_tunnel_stalls_sub">Tünel kapalı: %1$s. Sonraki videonun tünellemeyi yeniden denemesini sağlar.</string>
+    <string name="reshaped_formats_forget_tunnel_stalls_none">Hatırlanan bir şey yok</string>
+    <string name="reshaped_formats_forget_tunnel_stalls_done">Tünel takılmaları unutuldu</string>
+    <string name="reshaped_formats_inject_hdr10">Dolby Vision kaldırıldığında HDR10 meta verisi ekle</string>
+    <string name="reshaped_formats_inject_hdr10_sub">HDR10 temel katmanı olarak oynatılan Dolby Vision Profil 8 için kaynağın mastering meta verilerini (MaxCLL, MaxFALL ve tepe parlaklık) ekler, böylece HDR10 TV\'ler doğru ton eşlemesi yapar. Yalnızca Oynatma ayarlarındaki DV işleme DV\'yi Kaldır veya HDR10 temel katmanı olduğunda etkindir.</string>
+
+    <!-- reshaped_sync_strings.xml -->
+    <string name="reshaped_sync_sign_in_title">Google ile eşitle</string>
+    <string name="reshaped_sync_sign_in_description">Reshaped ayarlarını ve Canlı TV\'yi TV\'lerinizde ve telefonunuzda aynı tutun</string>
+    <string name="reshaped_sync_not_configured">Bu sürümde Google ile giriş ayarlanmamış</string>
+    <string name="reshaped_sync_sign_in_starting">Giriş kodu alınıyor…</string>
+    <string name="reshaped_sync_sign_in_instruction">Telefonunuzla tarayıp Google hesabınızla onaylayın. Ya da %1$s adresini açıp şunu girin:</string>
+    <string name="reshaped_sync_phone_instruction">Düğmeye dokunun: kod kopyalanır ve Google açılır. Google isterse kodu yapıştırın, ardından hesabınızı seçin.</string>
+    <string name="reshaped_sync_phone_button">Kodu kopyala ve Google\'ı aç</string>
+    <string name="reshaped_sync_phone_copied">Kod kopyalandı</string>
+    <string name="reshaped_sync_sign_in_waiting">Telefonunuzda onaylamanız bekleniyor…</string>
+    <string name="reshaped_sync_sign_in_declined">Giriş reddedildi veya Google Drive erişiminin işareti kaldırıldı. Tekrar deneyin ve izin verin.</string>
+    <string name="reshaped_sync_sign_in_expired">Kodun süresi doldu. Yeni kod için tekrar deneyin.</string>
+    <string name="reshaped_sync_sign_in_failed">Google\'a ulaşılamadı. Bağlantıyı kontrol edip tekrar deneyin.</string>
+    <string name="reshaped_sync_sign_in_refused">Google bu girişi reddetti. Bu genellikle Google Cloud istemcisinin veya onay ekranının değiştirilmesi gerektiği anlamına gelir.</string>
+    <string name="reshaped_sync_sign_in_detail">Ayrıntılar: %1$s</string>
+    <string name="reshaped_sync_try_again">Tekrar dene</string>
+    <string name="reshaped_sync_account_title">Google hesabı</string>
+    <string name="reshaped_sync_signed_in_as">%1$s olarak giriş yapıldı</string>
+    <string name="reshaped_sync_signed_in">Giriş yapıldı</string>
+    <string name="reshaped_sync_settings_title">Reshaped ayarlarını eşitle</string>
+    <string name="reshaped_sync_settings_description">AutoSync, sarma önizlemeleri ve diğer Reshaped seçenekleri. Arabellek boyutları ve kanal önizlemeleri cihaza özel kalır</string>
+    <string name="reshaped_sync_live_tv_title">Canlı TV\'yi eşitle</string>
+    <string name="reshaped_sync_live_tv_description">Giriş bilgileriyle kaynaklar, favoriler, kategoriler ve son kanal</string>
+    <string name="reshaped_sync_now_title">Şimdi eşitle</string>
+    <string name="reshaped_sync_never">Henüz eşitlenmedi</string>
+    <string name="reshaped_sync_last">Son eşitleme: %1$s</string>
+    <string name="reshaped_sync_running">Eşitleniyor…</string>
+    <string name="reshaped_sync_failed_network">Google\'a ulaşılamadı. Daha sonra tekrar denenecek</string>
+    <string name="reshaped_sync_failed_signed_out">Google erişimi sona erdi. Tekrar giriş yapın</string>
+    <string name="reshaped_sync_failed_newer">Eşitlemeye devam etmek için bu cihazda Nuvio Reshaped\'i güncelleyin</string>
+    <string name="reshaped_sync_sign_out_title">Google\'dan çıkış yapılsın mı?</string>
+    <string name="reshaped_sync_sign_out_description">Bu TV eşitlemeyi durdurur. Eşitlenen veriler Google hesabınızda kalır.</string>
+    <string name="reshaped_sync_sign_out">Çıkış yap</string>
+
+    <!-- reshaped_update_strings.xml -->
+    <string name="reshaped_update_channel_tester">Test</string>
+    <string name="reshaped_update_channel_tester_description">Hata bulmaya yardım edenler için erken test sürümleri. Bazı şeylerin bozulmasını bekleyin.</string>
+    <string name="reshaped_update_waiting_for_channel">Bu kanala bir sonraki sürümüyle geçeceksiniz. O zamana kadar en son sürümdesiniz.</string>
+
+    <!-- seek_preview_strings.xml -->
+    <string name="player_seek_preview_sync">Önizleme Eşitleme</string>
+    <string name="player_seek_preview_sync_hint">Küçük resim bu panelin arkasında oynayan kareyle eşleşene kadar ayarlayın.</string>
+    <string name="player_seek_preview_sync_keys">Sol/Sağ ayarlar · OK sıfırlar · Aşağı önerilen değeri kullanır · Yukarı veya Geri kapatır</string>
+    <string name="player_seek_preview_sync_suggested">Önerilen: %1$s (önizleme kaynağıyla süre farkı)</string>
+    <string name="cd_seek_preview_sync">Önizleme eşitleme</string>
+    <string name="settings_seek_preview_local">Önizlemeleri cihazda oluştur</string>
+    <string name="settings_seek_preview_local_description">Siz izlerken, kaynaklar elverdiğinde önbellekteki oynatma verilerini veya küçük indirmeleri kullanarak sarma önizlemelerini arka planda oluşturur. Oynatma hemen başlar. Seekr de varsa kullanılır.</string>
+    <string name="settings_seek_preview_prepare">Oynatmadan önce önizlemeleri hazırla</string>
+    <string name="settings_seek_preview_prepare_description">Önce başlığın tamamı için önizlemeleri oluşturur. İstediğiniz zaman izlemeye başlayabilirsiniz.</string>
+    <string name="settings_seek_preview_coverage">Önizleme hazırlama kapsamı</string>
+    <string name="settings_seek_preview_full">Tam · oynatmadan önce daha fazla önizleme</string>
+    <string name="settings_seek_preview_faster">Daha hızlı · dengeli kapsam</string>
+    <string name="settings_seek_preview_fastest">En hızlı · önce seyrek kapsam</string>
+    <string name="settings_seek_preview_copies">Önizlemeler için daha küçük bir kopya kullan</string>
+    <string name="settings_seek_preview_copies_description">Görüntülerinin ve zamanlamasının eşleştiğini doğruladıktan sonra mevcut daha küçük bir dosyayı kullanır.</string>
+    <string name="settings_seek_preview_next">Sonraki bölümün önizlemelerini hazırla</string>
+    <string name="settings_seek_preview_next_description">Oynatmanın yeterli kaynağı olduğunda önceden yüklenmiş bölüm kaynaklarından önizlemeleri hazırlar.</string>
+    <string name="seek_preview_preparing">Sarma önizlemeleri hazırlanıyor</string>
+    <string name="seek_preview_preparing_progress">%2$d önizlemeden %1$d tanesi hazır</string>
+    <string name="seek_preview_preparing_ready">Önizlemeler hazır</string>
+    <string name="seek_preview_start_now">Şimdi izlemeye başla</string>
+
+    <!-- seekr_key_strings.xml -->
+    <string name="settings_seekr_phone_instruction">Anahtarınızı orada yapıştırmak için telefonunuzla tarayın.</string>
+    <string name="settings_seekr_phone_subtitle">seekr.tv\'deki anahtarınızı yapıştırın. TV anahtarı kontrol edip kaydeder.</string>
+    <string name="settings_seekr_phone_send">TV\'ye gönder</string>
+    <string name="settings_seekr_phone_sending">Gönderiliyor…</string>
+    <string name="settings_seekr_phone_sent">Gönderildi. Anahtarın kabul edilip edilmediğini görmek için TV\'yi kontrol edin.</string>
+    <string name="settings_seekr_phone_failed">TV\'ye ulaşılamadı. Seekr anahtarı ekranı hâlâ açık mı?</string>
+
+    <!-- strings.xml -->
+    <string name="layout_hero_description_auto_scroll">Açıklamaları otomatik kaydır</string>
+    <string name="layout_hero_description_auto_scroll_sub">Ana ekrandaki uzun açıklamaları kesmek yerine yavaşça kaydırır.</string>
+
+    <!-- subtitle_font_strings.xml -->
+    <string name="subtitle_font_title">Altyazı yazı tipi</string>
+    <string name="subtitle_font_default">Varsayılan (sistem yazı tipi)</string>
+    <string name="subtitle_font_dialog_description">Her iki oynatıcıda altyazılar için kendi .ttf veya .otf yazı tipinizi kullanın (en fazla 20 MB). Stilli ASS altyazılar kendi yazı tiplerini korur.</string>
+    <string name="subtitle_font_current">Geçerli yazı tipi: %1$s</string>
+    <string name="subtitle_font_phone_instruction">TV\'ye yazı tipi dosyası göndermek için telefonunuzla tarayın veya bu adresi aynı ağdaki bir bilgisayarda açın.</string>
+    <string name="subtitle_font_choose_file">Dosya seç</string>
+    <string name="subtitle_font_from_url">URL\'den</string>
+    <string name="subtitle_font_reset">Varsayılana sıfırla</string>
+    <string name="subtitle_font_done">Bitti</string>
+    <string name="subtitle_font_importing">Yazı tipi içe aktarılıyor…</string>
+    <string name="subtitle_font_imported">Yazı tipi içe aktarıldı: %1$s</string>
+    <string name="subtitle_font_invalid">Bu dosya kullanılabilir bir TTF veya OTF yazı tipi değil.</string>
+    <string name="subtitle_font_too_large">Bu yazı tipi 20 MB\'tan büyük.</string>
+    <string name="subtitle_font_download_failed">Yazı tipi indirilemedi.</string>
+    <string name="subtitle_font_no_picker">Bu TV\'de dosya seçici yok. Yazı tipini bunun yerine telefonunuzdan gönderin.</string>
+    <string name="subtitle_font_url_title">URL\'den yazı tipi içe aktar</string>
+    <string name="subtitle_font_url_description">Bir .ttf veya .otf dosyasının doğrudan bağlantısı, en fazla 20 MB.</string>
+    <string name="subtitle_font_url_import">İçe aktar</string>
+    <string name="subtitle_font_web_title">Altyazı yazı tipi gönder</string>
+    <string name="subtitle_font_web_subtitle">Bir .ttf veya .otf dosyası seçin (en fazla 20 MB). TV\'niz bunu her iki oynatıcıda altyazılar için kullanır.</string>
+    <string name="subtitle_font_web_choose">Önce bir yazı tipi dosyası seçin</string>
+    <string name="subtitle_font_web_upload">TV\'ye gönder</string>
+    <string name="subtitle_font_web_uploading">Gönderiliyor…</string>
+    <string name="subtitle_font_web_current">Geçerli yazı tipi:</string>
+    <string name="subtitle_font_web_imported">Yazı tipi içe aktarıldı</string>
+    <string name="subtitle_font_web_connection_error">Bağlantı hatası</string>
+
+    <!-- volume_boost_strings.xml -->
+    <string name="volume_boost_label">Ses yükseltme</string>
+    <string name="volume_boost_value">%1$d%% · +%2$d dB</string>
+</resources>
