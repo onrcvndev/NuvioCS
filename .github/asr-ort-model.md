@@ -63,7 +63,7 @@ supported by the runtime API/source and native host test, not a completed TV tes
 
 ## Distribution and migration
 
-The standalone model release is `asr-models-ort-v1` in `DavidVamaiotu/NuvioTV-Nuvio CS`.
+The standalone model release is `asr-models-ort-v1` in `onrcvndev/NuvioCS`.
 It is a prerelease with `latest=false`; it is not an APK release or app update.
 The app pins each downloaded file's size and SHA-256 in `AsrModelFiles.kt`.
 Downloads are written to `.part`, hashed, and renamed only after verification.

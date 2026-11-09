@@ -22,7 +22,7 @@ internal object AsrModel {
 
     private const val LEGACY_VERSION = "gigaspeech-2023-12-12"
     private const val VERSION = "$LEGACY_VERSION-ort-v1"
-    private const val DOWNLOAD = "https://github.com/DavidVamaiotu/NuvioTV-Reshaped/releases/download/asr-models-ort-v1/"
+    private const val DOWNLOAD = "https://github.com/onrcvndev/NuvioCS/releases/download/asr-models-ort-v1/"
     private val FILES = AsrModelFiles.optimized
     private val TOTAL_BYTES = FILES.sumOf { it.size }
 
