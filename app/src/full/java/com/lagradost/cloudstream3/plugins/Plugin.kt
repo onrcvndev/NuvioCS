@@ -2,7 +2,9 @@ package com.lagradost.cloudstream3.plugins
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.util.Log
+import com.lagradost.cloudstream3.APIHolder
 import com.lagradost.cloudstream3.MainAPI
 import com.lagradost.cloudstream3.utils.ExtractorApi
 import com.lagradost.cloudstream3.utils.extractorApis
@@ -23,6 +25,9 @@ open class Plugin {
     /** Extensions can set this to provide a settings UI callback. No-op in NuvioTV. */
     var openSettings: ((Context) -> Unit)? = null
 
+    /** Plugin resources (upstream Plugin.resources). Only set for requiresResources plugins. */
+    var resources: Resources? = null
+
     /** Full file path to the plugin (matches BasePlugin's property). */
     var filename: String? = null
 
@@ -42,14 +47,24 @@ open class Plugin {
         load()
     }
 
+    /** Upstream BasePlugin hook; wrapper plugins forward it to their delegates. */
+    open fun beforeUnload() {}
+
     fun registerMainAPI(element: MainAPI) {
         Log.d("CS3Plugin", "registerMainAPI called: ${element.name} (${element.javaClass.name})")
         _registeredMainAPIs.add(element)
-        // Also register globally for extensions that access APIHolder directly
         element.sourcePlugin = this.filename
+        // Upstream BasePlugin her kaydı global listeye de ekler. Hub tarzı eklentiler
+        // (ör. WioSinema) kaydı iç delege Plugin örneği üzerinden yapar ve
+        // loader bu sağlayıcıları ancak allProviders farkından görebilir.
         try {
-            com.lagradost.cloudstream3.APIHolder.addPluginMapping(element)
-        } catch (_: Exception) {}
+            synchronized(APIHolder.allProviders) {
+                APIHolder.allProviders.add(element)
+            }
+        } catch (_: Throwable) {}
+        try {
+            APIHolder.addPluginMapping(element)
+        } catch (_: Throwable) {}
     }
 
     fun registerExtractorAPI(element: ExtractorApi) {

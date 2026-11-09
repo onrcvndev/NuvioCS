@@ -164,6 +164,11 @@ private class ReflectivePluginWrapper(private val foreignInstance: Any) : Plugin
 
 private const val MAX_DEX_SIZE = 10 * 1024 * 1024L // 10MB max per .cs3 file
 
+private val RUNTIME_LIBRARY_PREFIXES = listOf(
+    "com.lagradost.", "kotlin.", "kotlinx.", "android.", "androidx.", "okhttp3.", "okio.",
+    "org.jsoup.", "com.fasterxml.", "com.google.", "org.intellij.", "org.jetbrains."
+)
+
 /**
  * Manages downloading, loading, and caching of DEX-based external extensions (.cs3 files).
  */
@@ -181,6 +186,15 @@ class ExternalExtensionLoader @Inject constructor(
 
     /** Cache of loaded MainAPI instances by scraper ID */
     private val apiCache = ConcurrentHashMap<String, MainAPI>()
+
+    /** All MainAPIs a plugin registered (hub plugins register several), by scraper ID */
+    private val apiListCache = ConcurrentHashMap<String, List<MainAPI>>()
+
+    /**
+     * Plugin load() işlemleri global APIHolder.allProviders farkıyla izlendiği için
+     * aynı anda iki eklenti yüklenirse kayıtlar karışır; yüklemeyi seri yaparız.
+     */
+    private val pluginLoadLock = Any()
 
     /** Cache of loaded class loaders by scraper ID */
     private val classLoaderCache = ConcurrentHashMap<String, DexClassLoader>()
@@ -260,6 +274,7 @@ class ExternalExtensionLoader @Inject constructor(
      */
     fun loadExtension(scraperId: String): List<MainAPI> {
         // Check cache first
+        apiListCache[scraperId]?.let { return it }
         apiCache[scraperId]?.let { return listOf(it) }
         com.nuvio.tv.core.runtime.PluginRuntimeHooks.ensureCloudstreamInitialized()
 
@@ -314,28 +329,24 @@ class ExternalExtensionLoader @Inject constructor(
             // primary overload — get their impl invoked. Plugins that only override
             // load(Activity?) or no-arg load() still work: stub's load(Context) casts
             // the arg to Activity? and chains through.
-            val activity = AcraApplication.getActivity()
-            try {
-                plugin.load((activity as Context?) ?: context)
-            } catch (e: Exception) {
-                Log.w(TAG, "plugin.load() threw (partial load, ${plugin.registeredMainAPIs.size} APIs so far): ${e.message}", e)
-            } catch (e: Error) {
-                val missingClass = extractMissingClassName(e)
+            val loadResult = loadPluginCollectingApis(plugin, dexFile)
+            loadResult.error?.let { e ->
+                val missingClass = (e as? Error)?.let(::extractMissingClassName)
                 if (missingClass != null) {
-                    Log.w(TAG, "plugin.load() MISSING CLASS: $missingClass (${plugin.registeredMainAPIs.size} APIs so far)", e)
+                    Log.w(TAG, "plugin.load() MISSING CLASS: $missingClass (${loadResult.apis.size} APIs so far)", e)
                 } else {
-                    Log.w(TAG, "plugin.load() linkage error (partial load, ${plugin.registeredMainAPIs.size} APIs so far): ${e.message}", e)
+                    Log.w(TAG, "plugin.load() failed (partial load, ${loadResult.apis.size} APIs so far): ${e.message}", e)
                 }
             }
 
             // Register any extractors the plugin provides
             extractorRegistry.registerAll(plugin.registeredExtractorAPIs)
 
-            var apis = plugin.registeredMainAPIs
+            var apis = loadResult.apis
             Log.d(TAG, "After load(): ${apis.size} MainAPIs, ${plugin.registeredExtractorAPIs.size} extractors")
 
             // FALLBACK: If load() registered 0 APIs or 0 extractors, scan DEX directly.
-            if (apis.isEmpty() || plugin.registeredExtractorAPIs.isEmpty()) {
+            if (apis.isEmpty() || loadResult.extractorCount == 0) {
                 Log.d(TAG, "Fallback: scanning DEX for MainAPI/ExtractorApi subclasses in $scraperId")
                 val fallbackApis = mutableListOf<MainAPI>()
                 val fallbackExtractors = mutableListOf<ExtractorApi>()
@@ -349,7 +360,7 @@ class ExternalExtensionLoader @Inject constructor(
                         !className.contains('$') &&
                         !className.contains("Plugin") &&
                         !className.contains("Fragment") &&
-                        className.startsWith("com.")
+                        !isRuntimeLibraryClass(className)
                     }
 
                     for (className in candidates) {
@@ -398,6 +409,7 @@ class ExternalExtensionLoader @Inject constructor(
             // Also cache the first API under the plain scraper ID
             if (apis.isNotEmpty()) {
                 apiCache[scraperId] = apis.first()
+                apiListCache[scraperId] = apis.toList()
             }
 
             Log.d(TAG, "Loaded extension $scraperId: ${apis.size} providers (${apis.joinToString { it.name }})")
@@ -427,12 +439,20 @@ class ExternalExtensionLoader @Inject constructor(
     }
 
     /**
+     * All MainAPIs registered by the plugin, loading if necessary. Hub plugins
+     * (one .cs3 bundling several sites) register more than one provider.
+     */
+    fun getApis(scraperId: String): List<MainAPI> {
+        return apiListCache[scraperId] ?: loadExtension(scraperId)
+    }
+
+    /**
      * Load extension with diagnostic output.
      */
     fun loadExtensionWithDiagnostics(scraperId: String, diagnostics: TestDiagnostics): List<MainAPI> {
-        apiCache[scraperId]?.let {
-            diagnostics.addStep("MainAPI cached: ${it.name}")
-            return listOf(it)
+        apiListCache[scraperId]?.let { cached ->
+            diagnostics.addStep("MainAPI cached: ${cached.joinToString { it.name }}")
+            return cached
         }
         com.nuvio.tv.core.runtime.PluginRuntimeHooks.ensureCloudstreamInitialized()
 
@@ -483,22 +503,18 @@ class ExternalExtensionLoader @Inject constructor(
             AcraApplication.context = context
             extractorRegistry.installGlobal()
 
-            val activity = AcraApplication.getActivity()
-            try {
-                plugin.load((activity as Context?) ?: context)
-                diagnostics.addStep("load(Context): OK, ${plugin.registeredMainAPIs.size} APIs")
-            } catch (e: Exception) {
-                diagnostics.addStep("load() FAILED: ${e.javaClass.simpleName}: ${e.message?.take(120)}")
-            } catch (e: Error) {
-                val missing = extractMissingClassName(e)
-                diagnostics.addStep("load() ERROR: ${missing ?: e.message?.take(120)}")
+            val loadResult = loadPluginCollectingApis(plugin, dexFile)
+            when (val e = loadResult.error) {
+                null -> diagnostics.addStep("load(Context): OK, ${loadResult.apis.size} APIs")
+                is Error -> diagnostics.addStep("load() ERROR: ${e.javaClass.simpleName}: ${extractMissingClassName(e) ?: e.message?.take(120)}")
+                else -> diagnostics.addStep("load() FAILED: ${e.javaClass.simpleName}: ${e.message?.take(120)}")
             }
 
             extractorRegistry.registerAll(plugin.registeredExtractorAPIs)
 
-            var apis = plugin.registeredMainAPIs
+            var apis = loadResult.apis
 
-            if (apis.isEmpty() || plugin.registeredExtractorAPIs.isEmpty()) {
+            if (apis.isEmpty() || loadResult.extractorCount == 0) {
                 diagnostics.addStep("Fallback: scanning DEX for MainAPI + ExtractorApi subclasses...")
                 val fallbackApis = mutableListOf<MainAPI>()
                 val fallbackExtractors = mutableListOf<ExtractorApi>()
@@ -506,7 +522,7 @@ class ExternalExtensionLoader @Inject constructor(
                     !className.contains('$') &&
                     !className.contains("Plugin") &&
                     !className.contains("Fragment") &&
-                    className.startsWith("com.")
+                    !isRuntimeLibraryClass(className)
                 }
 
                 for (className in candidates) {
@@ -556,6 +572,7 @@ class ExternalExtensionLoader @Inject constructor(
             }
             if (apis.isNotEmpty()) {
                 apiCache[scraperId] = apis.first()
+                apiListCache[scraperId] = apis.toList()
             }
 
             apis
@@ -608,15 +625,18 @@ class ExternalExtensionLoader @Inject constructor(
 
                 val plugin = findAndLoadPlugin(classLoader, dexFile)
                 if (plugin != null) {
-                    val activity = AcraApplication.getActivity()
-                    try {
-                        plugin.load((activity as Context?) ?: context)
-                    } catch (_: Exception) {
-                    } catch (_: Error) {
+                    val loadResult = loadPluginCollectingApis(plugin, dexFile)
+                    // Aynı load() sonucunu runner için de sakla; aksi halde eklenti ikinci
+                    // kez yüklenir ve yan etkileri (telemetri, domain güncelleme) tekrarlanır.
+                    if (loadResult.apis.isNotEmpty() && !apiListCache.containsKey(scraperId)) {
+                        val apis = loadResult.apis.toList()
+                        apis.forEach { api -> apiCache["$scraperId:${api.name}"] = api }
+                        apiCache[scraperId] = apis.first()
+                        apiListCache[scraperId] = apis
                     }
-                    if (plugin.registeredExtractorAPIs.isNotEmpty()) {
+                    if (loadResult.extractorCount > 0) {
                         extractorRegistry.registerAll(plugin.registeredExtractorAPIs)
-                        totalExtractors += plugin.registeredExtractorAPIs.size
+                        totalExtractors += loadResult.extractorCount
                         continue
                     }
                 }
@@ -654,6 +674,7 @@ class ExternalExtensionLoader @Inject constructor(
 
     fun deleteExtension(scraperId: String) {
         apiCache.keys.filter { it.startsWith(scraperId) }.forEach { apiCache.remove(it) }
+        apiListCache.remove(scraperId)
         classLoaderCache.remove(scraperId)
         extractorPreloadedIds.remove(scraperId)
         File(extensionsDir, "${safeFileName(scraperId)}.cs3").delete()
@@ -662,6 +683,7 @@ class ExternalExtensionLoader @Inject constructor(
 
     fun evictCache(scraperId: String) {
         apiCache.keys.filter { it.startsWith(scraperId) }.forEach { apiCache.remove(it) }
+        apiListCache.remove(scraperId)
         classLoaderCache.remove(scraperId)
         extractorPreloadedIds.remove(scraperId)
     }
@@ -676,6 +698,52 @@ class ExternalExtensionLoader @Inject constructor(
             Log.d(TAG, "Fixed DEX permissions (set read-only): ${dexFile.name}")
         }
     }
+
+    private class PluginLoadResult(
+        val apis: List<MainAPI>,
+        /** Extractors registered on the plugin itself or on an inner delegate plugin. */
+        val extractorCount: Int,
+        val error: Throwable?
+    )
+
+    /**
+     * Runs plugin.load() and returns every MainAPI it registered: the plugin's own list
+     * plus providers that appeared in APIHolder.allProviders during load. The second
+     * source catches hub plugins whose entry class delegates registration to an inner
+     * Plugin instance (e.g. WioSinema's DiziPalHubEntry -> DiziPalPlugin).
+     */
+    private fun loadPluginCollectingApis(plugin: Plugin, dexFile: File): PluginLoadResult =
+        synchronized(pluginLoadLock) {
+            if (plugin.filename == null) plugin.filename = dexFile.absolutePath
+            val before = snapshotGlobalProviders()
+            val extractorsBefore = extractorApis.size
+            val activity = AcraApplication.getActivity()
+            val error = try {
+                plugin.load((activity as Context?) ?: context)
+                null
+            } catch (e: Throwable) {
+                e
+            }
+            val beforeIds = identitySetOf(before)
+            val added = snapshotGlobalProviders().filter { it !in beforeIds }
+            val seen = identitySetOf(emptyList())
+            val ordered = (plugin.registeredMainAPIs + added).filter { seen.add(it) }
+            val extractorCount = maxOf(plugin.registeredExtractorAPIs.size, extractorApis.size - extractorsBefore)
+            PluginLoadResult(ordered, extractorCount, error)
+        }
+
+    private fun identitySetOf(items: List<MainAPI>): MutableSet<MainAPI> =
+        java.util.Collections.newSetFromMap(java.util.IdentityHashMap<MainAPI, Boolean>()).also { it.addAll(items) }
+
+    private fun snapshotGlobalProviders(): List<MainAPI> = try {
+        synchronized(APIHolder.allProviders) { APIHolder.allProviders.toList() }
+    } catch (_: Throwable) {
+        emptyList()
+    }
+
+    /** Classes shipped by the host runtime; never plugin-provided APIs. */
+    private fun isRuntimeLibraryClass(className: String): Boolean =
+        RUNTIME_LIBRARY_PREFIXES.any { className.startsWith(it) }
 
     private fun extractMissingClassName(e: Error): String? {
         val msg = e.message ?: return null

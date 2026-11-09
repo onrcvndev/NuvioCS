@@ -31,8 +31,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,6 +45,13 @@ private const val EXECUTION_TIMEOUT_MS = 120_000L
 // TorraStream) scrape many source sites in parallel and happily burn through
 // minutes — cap them at 60s and return the partial link set collected so far.
 private const val LOADLINKS_TIMEOUT_MS = 60_000L
+// Tüm eklentiler genelinde aynı anda çalışan MainAPI sayısı. Hub eklentileri tek başına
+// onlarca sağlayıcı kaydedebildiği için eklenti başına sınır yetmiyor; sınırsız paralellik
+// Cloudflare WebView'larıyla birlikte TV cihazlarında ANR'ye yol açtı.
+private const val MAX_CONCURRENT_APIS = 8
+// Farklı eklentilerin kaydettiği aynı sağlayıcı (sınıf + ad + mainUrl) aynı içerik için bu süre
+// içinde yalnızca ilk sahiplenen eklentide çalışır; süre dolunca yeniden çalışabilir.
+private const val DUPLICATE_API_WINDOW_MS = 3 * 60_000L
 private const val MIN_TITLE_SIMILARITY = 0.5
 private const val MAX_ALT_TITLES = 8
 
@@ -58,6 +68,24 @@ class ExternalExtensionRunner @Inject constructor(
     private val tmdbMetadataService: TmdbMetadataService,
     private val tmdbService: TmdbService
 ) {
+    private val apiSemaphore = Semaphore(MAX_CONCURRENT_APIS)
+
+    private data class ApiClaim(val scraperId: String, val claimedAtMs: Long)
+    private val apiClaims = ConcurrentHashMap<String, ApiClaim>()
+
+    /** Bu eklenti, verilen içerik için bu sağlayıcıyı çalıştırabilir mi (ilk sahiplenen kazanır). */
+    private fun claimApi(api: MainAPI, scraperId: String, requestKey: String): Boolean {
+        val now = System.currentTimeMillis()
+        apiClaims.values.removeIf { now - it.claimedAtMs > DUPLICATE_API_WINDOW_MS }
+        val key = "${api.javaClass.name}|${api.name}|${api.mainUrl}|$requestKey"
+        val claim = apiClaims.compute(key) { _, existing ->
+            if (existing == null || existing.scraperId == scraperId ||
+                now - existing.claimedAtMs > DUPLICATE_API_WINDOW_MS
+            ) ApiClaim(scraperId, now) else existing
+        }
+        return claim?.scraperId == scraperId
+    }
+
     suspend fun execute(
         scraperId: String,
         tmdbId: String,
@@ -67,26 +95,51 @@ class ExternalExtensionRunner @Inject constructor(
     ): List<LocalScraperResult> = withContext(Dispatchers.IO) {
         extensionLoader.ensureExtractorsLoaded(listOf(scraperId))
 
-        val api = extensionLoader.getApi(scraperId)
-        if (api == null) {
+        val apis = extensionLoader.getApis(scraperId)
+        if (apis.isEmpty()) {
             Log.e(TAG, "No API loaded for scraper: $scraperId")
             return@withContext emptyList()
         }
 
-        try {
-            executeInternal(api, tmdbId, mediaType, season, episode)
-        } catch (e: Exception) {
-            Log.e(TAG, "Extension ${api.name} failed: ${e.javaClass.simpleName}: ${e.message}", e)
-            emptyList()
-        } catch (e: Error) {
-            val missing = extractMissingClass(e)
-            if (missing != null) {
-                Log.e(TAG, "Extension ${api.name} MISSING CLASS: $missing", e)
-            } else {
-                Log.e(TAG, "Extension ${api.name} linkage error: ${e.javaClass.simpleName}: ${e.message}", e)
+        val requestKey = "$tmdbId|$mediaType|$season|$episode"
+        val ownedApis = apis.filter { api ->
+            claimApi(api, scraperId, requestKey).also { owned ->
+                if (!owned) Log.d(TAG, "Skipping duplicate ${api.name} (${api.mainUrl}) in $scraperId")
             }
-            emptyList()
         }
+
+        // Hub eklentileri (tek .cs3 içinde birden çok site) birden fazla MainAPI kaydeder;
+        // hepsini paralel çalıştırıp sonuçları birleştiriyoruz.
+        coroutineScope {
+            ownedApis.map { api ->
+                async { apiSemaphore.withPermit { executeApiSafely(api, tmdbId, mediaType, season, episode) } }
+            }
+                .awaitAll()
+                .flatten()
+        }
+    }
+
+    private suspend fun executeApiSafely(
+        api: MainAPI,
+        tmdbId: String,
+        mediaType: String,
+        season: Int?,
+        episode: Int?
+    ): List<LocalScraperResult> = try {
+        executeInternal(api, tmdbId, mediaType, season, episode)
+    } catch (e: kotlinx.coroutines.CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Log.e(TAG, "Extension ${api.name} failed: ${e.javaClass.simpleName}: ${e.message}", e)
+        emptyList()
+    } catch (e: Error) {
+        val missing = extractMissingClass(e)
+        if (missing != null) {
+            Log.e(TAG, "Extension ${api.name} MISSING CLASS: $missing", e)
+        } else {
+            Log.e(TAG, "Extension ${api.name} linkage error: ${e.javaClass.simpleName}: ${e.message}", e)
+        }
+        emptyList()
     }
 
     suspend fun executeWithDiagnostics(
@@ -101,18 +154,32 @@ class ExternalExtensionRunner @Inject constructor(
 
         diagnostics.addStep("Loading DEX extension...")
         val apis = extensionLoader.loadExtensionWithDiagnostics(scraperId, diagnostics)
-        val api = apis.firstOrNull()
 
-        if (api == null) {
+        if (apis.isEmpty()) {
             diagnostics.addStep("No MainAPI available after load")
             return@withContext emptyList()
         }
 
+        val results = mutableListOf<LocalScraperResult>()
+        for (api in apis) {
+            results += executeApiWithDiagnostics(api, tmdbId, mediaType, season, episode, diagnostics)
+        }
+        results
+    }
+
+    private suspend fun executeApiWithDiagnostics(
+        api: MainAPI,
+        tmdbId: String,
+        mediaType: String,
+        season: Int?,
+        episode: Int?,
+        diagnostics: TestDiagnostics
+    ): List<LocalScraperResult> {
         diagnostics.addStep("Using MainAPI: ${api.name} (${api.javaClass.simpleName})")
         val isTmdb = api is TmdbProvider
         diagnostics.addStep("Provider type: ${if (isTmdb) "TmdbProvider" else "search-based"}")
 
-        withTimeoutOrNull(EXECUTION_TIMEOUT_MS) {
+        return withTimeoutOrNull(EXECUTION_TIMEOUT_MS) {
             try {
                 if (isTmdb) {
                     executeTmdbProviderWithDiagnostics(api, tmdbId, mediaType, season, episode, diagnostics)

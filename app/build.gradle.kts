@@ -565,10 +565,10 @@ dependencies {
     add("fullImplementation", libs.nicehttp)
     add("fullImplementation", libs.conscrypt.android)
     add("fullImplementation", "com.github.recloudstream.cloudstream:library:${libs.versions.cloudstream.get()}") {
-        exclude(group = "org.mozilla", module = "rhino")
         exclude(group = "com.github.AmarullisVFX", module = "newpipeextractor")
         exclude(group = "com.github.AmaryllisVFX", module = "newpipeextractor")
         exclude(group = "com.github.AmaryllisVFX.newpipeextractor")
+        exclude(group = "com.github.teamnewpipe", module = "NewPipeExtractor")
         exclude(group = "info.debatty", module = "java-string-similarity")
     }
 

@@ -1185,6 +1185,10 @@ class PluginManager @Inject constructor(
                             ?.ifEmpty { listOf("movie", "tv") }
                             ?: listOf("movie", "tv")
 
+                        // CloudStream status: 0=Down, 1=Ok, 2=Slow, 3=Beta. Yalnızca "Down"
+                        // çalışmaz kabul edilir; Beta/Slow eklentiler de etkinleştirilebilir.
+                        val manifestEnabled = plugin.status != 0
+                        val existingEnabled = existingScrapers.firstOrNull { it.id == scraperId }?.enabled
                         val scraper = ScraperInfo(
                             id = scraperId,
                             repositoryId = repoId,
@@ -1193,8 +1197,8 @@ class PluginManager @Inject constructor(
                             version = plugin.version.toString(),
                             filename = plugin.url,
                             supportedTypes = supportedTypes,
-                            enabled = true,
-                            manifestEnabled = plugin.status == 1,
+                            enabled = manifestEnabled && (existingEnabled ?: true),
+                            manifestEnabled = manifestEnabled,
                             logo = plugin.iconUrl,
                             contentLanguage = emptyList(),
                             formats = null,
