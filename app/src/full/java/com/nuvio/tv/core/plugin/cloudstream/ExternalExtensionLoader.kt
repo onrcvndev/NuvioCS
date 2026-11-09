@@ -196,6 +196,9 @@ class ExternalExtensionLoader @Inject constructor(
      */
     private val pluginLoadLock = Any()
 
+    /** Yüklenmiş plugin örnekleri; eklentinin openSettings ayar ekranına erişmek için tutulur. */
+    private val pluginCache = ConcurrentHashMap<String, Plugin>()
+
     /** Cache of loaded class loaders by scraper ID */
     private val classLoaderCache = ConcurrentHashMap<String, DexClassLoader>()
 
@@ -329,7 +332,7 @@ class ExternalExtensionLoader @Inject constructor(
             // primary overload — get their impl invoked. Plugins that only override
             // load(Activity?) or no-arg load() still work: stub's load(Context) casts
             // the arg to Activity? and chains through.
-            val loadResult = loadPluginCollectingApis(plugin, dexFile)
+            val loadResult = loadPluginCollectingApis(scraperId, plugin, dexFile)
             loadResult.error?.let { e ->
                 val missingClass = (e as? Error)?.let(::extractMissingClassName)
                 if (missingClass != null) {
@@ -442,6 +445,18 @@ class ExternalExtensionLoader @Inject constructor(
      * All MainAPIs registered by the plugin, loading if necessary. Hub plugins
      * (one .cs3 bundling several sites) register more than one provider.
      */
+    /**
+     * Eklentinin load() sırasında bağladığı ayar ekranı; yoksa null. Plugin örneği önbellekte yoksa
+     * (ör. önceden yalnızca API listesi önbelleğe alındıysa) eklenti yeniden yüklenir.
+     */
+    fun getOpenSettings(scraperId: String): ((Context) -> Unit)? {
+        if (!pluginCache.containsKey(scraperId)) {
+            evictCache(scraperId)
+            loadExtension(scraperId)
+        }
+        return pluginCache[scraperId]?.openSettings
+    }
+
     fun getApis(scraperId: String): List<MainAPI> {
         return apiListCache[scraperId] ?: loadExtension(scraperId)
     }
@@ -503,7 +518,7 @@ class ExternalExtensionLoader @Inject constructor(
             AcraApplication.context = context
             extractorRegistry.installGlobal()
 
-            val loadResult = loadPluginCollectingApis(plugin, dexFile)
+            val loadResult = loadPluginCollectingApis(scraperId, plugin, dexFile)
             when (val e = loadResult.error) {
                 null -> diagnostics.addStep("load(Context): OK, ${loadResult.apis.size} APIs")
                 is Error -> diagnostics.addStep("load() ERROR: ${e.javaClass.simpleName}: ${extractMissingClassName(e) ?: e.message?.take(120)}")
@@ -625,7 +640,7 @@ class ExternalExtensionLoader @Inject constructor(
 
                 val plugin = findAndLoadPlugin(classLoader, dexFile)
                 if (plugin != null) {
-                    val loadResult = loadPluginCollectingApis(plugin, dexFile)
+                    val loadResult = loadPluginCollectingApis(scraperId, plugin, dexFile)
                     // Aynı load() sonucunu runner için de sakla; aksi halde eklenti ikinci
                     // kez yüklenir ve yan etkileri (telemetri, domain güncelleme) tekrarlanır.
                     if (loadResult.apis.isNotEmpty() && !apiListCache.containsKey(scraperId)) {
@@ -673,6 +688,7 @@ class ExternalExtensionLoader @Inject constructor(
     }
 
     fun deleteExtension(scraperId: String) {
+        pluginCache.remove(scraperId)
         apiCache.keys.filter { it.startsWith(scraperId) }.forEach { apiCache.remove(it) }
         apiListCache.remove(scraperId)
         classLoaderCache.remove(scraperId)
@@ -682,6 +698,7 @@ class ExternalExtensionLoader @Inject constructor(
     }
 
     fun evictCache(scraperId: String) {
+        pluginCache.remove(scraperId)
         apiCache.keys.filter { it.startsWith(scraperId) }.forEach { apiCache.remove(it) }
         apiListCache.remove(scraperId)
         classLoaderCache.remove(scraperId)
@@ -712,8 +729,9 @@ class ExternalExtensionLoader @Inject constructor(
      * source catches hub plugins whose entry class delegates registration to an inner
      * Plugin instance (e.g. WioSinema's DiziPalHubEntry -> DiziPalPlugin).
      */
-    private fun loadPluginCollectingApis(plugin: Plugin, dexFile: File): PluginLoadResult =
+    private fun loadPluginCollectingApis(scraperId: String, plugin: Plugin, dexFile: File): PluginLoadResult =
         synchronized(pluginLoadLock) {
+            pluginCache[scraperId] = plugin
             if (plugin.filename == null) plugin.filename = dexFile.absolutePath
             val before = snapshotGlobalProviders()
             val extractorsBefore = extractorApis.size

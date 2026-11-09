@@ -82,4 +82,6 @@ class PluginManager {
 
     suspend fun testScraper(scraperId: String): Result<Pair<List<LocalScraperResult>, TestDiagnostics>> =
         Result.failure(UnsupportedOperationException("Plugins are not available in this build."))
+
+    suspend fun openScraperSettings(scraperId: String): Boolean = false
 }

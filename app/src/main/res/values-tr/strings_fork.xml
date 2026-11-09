@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="plugin_settings_btn">Ayarlar</string>
+    <string name="plugin_settings_unavailable">Bu eklentinin ayar ekranı yok</string>
+</resources>

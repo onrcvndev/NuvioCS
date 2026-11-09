@@ -85,6 +85,7 @@ class PluginViewModel @Inject constructor(
             is PluginUiEvent.ToggleScraper -> toggleScraper(event.scraperId, event.enabled)
             is PluginUiEvent.ToggleAllScrapersForRepo -> toggleAllScrapersForRepo(event.repoId, event.enabled)
             is PluginUiEvent.TestScraper -> testScraper(event.scraperId)
+            is PluginUiEvent.OpenScraperSettings -> openScraperSettings(event.scraperId)
             is PluginUiEvent.SetPluginsEnabled -> setPluginsEnabled(event.enabled)
             is PluginUiEvent.SetGroupStreamsByRepository -> setGroupStreamsByRepository(event.enabled)
             PluginUiEvent.ClearTestResults -> _uiState.update { it.copy(testResults = null, testDiagnostics = null, testScraperId = null) }
@@ -223,6 +224,14 @@ class PluginViewModel @Inject constructor(
         if (isReadOnly) return
         viewModelScope.launch {
             pluginManager.setGroupStreamsByRepository(enabled)
+        }
+    }
+
+    private fun openScraperSettings(scraperId: String) {
+        viewModelScope.launch {
+            if (!pluginManager.openScraperSettings(scraperId)) {
+                _uiState.update { it.copy(errorMessage = context.getString(R.string.plugin_settings_unavailable)) }
+            }
         }
     }
 

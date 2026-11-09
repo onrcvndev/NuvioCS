@@ -1030,6 +1030,38 @@ class PluginManager @Inject constructor(
         }
     }
     
+    /**
+     * Opens the settings screen a CloudStream (.cs3) plugin attaches in load(). Returns false when
+     * the plugin has none or no activity is available to host its dialog.
+     */
+    suspend fun openScraperSettings(scraperId: String): Boolean {
+        val scraper = dataStore.scrapers.first().find { it.id == scraperId } ?: return false
+        if (scraper.type != RepositoryType.EXTERNAL_DEX) return false
+        val openSettings = withContext(Dispatchers.IO) {
+            externalExtensionLoader.getOpenSettings(scraperId)
+        } ?: return false
+        val activity = com.lagradost.cloudstream3.AcraApplication.getActivity() ?: return false
+        return withContext(Dispatchers.Main) {
+            try {
+                // Eklenti dialogları MaterialButton/SwitchMaterial kullanıyor; bunlar MaterialComponents
+                // teması ister, uygulamanın Compose teması bunu sağlamıyor.
+                openSettings(
+                    android.view.ContextThemeWrapper(
+                        activity,
+                        com.google.android.material.R.style.Theme_MaterialComponents_NoActionBar
+                    )
+                )
+                // Alan adı ve sağlayıcı seçimleri load() sırasında okunuyor; bir sonraki aramada
+                // eklenti yeni ayarlarla yeniden yüklensin.
+                externalExtensionLoader.evictCache(scraperId)
+                true
+            } catch (e: Throwable) {
+                Log.e(TAG, "Failed to open settings for $scraperId: ${e.message}", e)
+                false
+            }
+        }
+    }
+
     private suspend fun fetchManifest(url: String): PluginManifest? = withContext(Dispatchers.IO) {
         try {
             val request = Request.Builder()

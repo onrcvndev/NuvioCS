@@ -49,6 +49,7 @@ sealed interface PluginUiEvent {
     data class ToggleScraper(val scraperId: String, val enabled: Boolean) : PluginUiEvent
     data class ToggleAllScrapersForRepo(val repoId: String, val enabled: Boolean) : PluginUiEvent
     data class TestScraper(val scraperId: String) : PluginUiEvent
+    data class OpenScraperSettings(val scraperId: String) : PluginUiEvent
     data class SetPluginsEnabled(val enabled: Boolean) : PluginUiEvent
     data class SetGroupStreamsByRepository(val enabled: Boolean) : PluginUiEvent
     object ClearTestResults : PluginUiEvent

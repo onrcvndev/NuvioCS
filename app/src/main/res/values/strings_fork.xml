@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nuvio CS strings, kept apart from upstream strings.xml to avoid merge conflicts. -->
+<resources>
+    <string name="plugin_settings_btn">Settings</string>
+    <string name="plugin_settings_unavailable">This plugin has no settings screen</string>
+</resources>
