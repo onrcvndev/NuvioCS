@@ -72,6 +72,13 @@ val localProperties = Properties().apply {
     }
 }
 
+val forkProperties = Properties().apply {
+    rootProject.file("fork.properties").inputStream().use(::load)
+}
+fun forkProperty(key: String): String =
+    forkProperties.getProperty(key)?.trim()?.takeIf { it.isNotEmpty() }
+        ?: error("fork.properties is missing $key")
+
 val devProperties = Properties().apply {
     val devPropertiesFile = rootProject.file("local.dev.properties")
     if (devPropertiesFile.exists()) {
@@ -367,6 +374,28 @@ androidComponents {
     onVariants(selector().withBuildType("debug")) { variant ->
         val isPlaystore = variant.productFlavors.any { it.second == "playstore" }
         variant.applicationId.set(if (isPlaystore) "com.nuvio.appdebug" else "com.nuviodebug.com")
+    }
+    // Nuvio CS: the full flavor ships under the fork's own identity from fork.properties. Registered
+    // after the debug block above so it overrides that application id.
+    onVariants(selector().withFlavor("distribution" to "full")) { variant ->
+        val forkApplicationId = forkProperty("applicationId")
+        variant.applicationId.set(if (variant.debuggable) "$forkApplicationId.debug" else forkApplicationId)
+        variant.outputs.forEach { output ->
+            output.versionName.set(forkProperty("versionName"))
+            output.versionCode.set(forkProperty("versionCode").toInt())
+        }
+        variant.resValues.put(
+            variant.makeResValueKey("string", "fork_app_name"),
+            com.android.build.api.variant.ResValue(forkProperty("appName"))
+        )
+        variant.buildConfigFields?.put(
+            "GITHUB_OWNER",
+            com.android.build.api.variant.BuildConfigField("String", "\"${forkProperty("githubOwner")}\"", null)
+        )
+        variant.buildConfigFields?.put(
+            "GITHUB_REPO",
+            com.android.build.api.variant.BuildConfigField("String", "\"${forkProperty("githubRepo")}\"", null)
+        )
     }
     // Only the full flavor ships the in-app updater.
     onVariants(selector().withFlavor("distribution" to "full")) { variant ->
